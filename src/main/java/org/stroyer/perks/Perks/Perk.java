@@ -44,6 +44,18 @@ public class Perk implements Serializable {
         allPerks.add(Solo);
     }
 
+    public static List<Perk> getAllPerks() {
+        return allPerks;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public String[] getDescription(){
+        return this.description;
+    }
+
     public Perk get(String name){
         for(Perk p : allPerks){
             if(p.name.equals(name)){

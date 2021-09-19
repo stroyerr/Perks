@@ -21,19 +21,29 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package org.stroyer.perks.Util;
+package org.stroyer.perks.Perks;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.stroyer.perks.Main;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.stroyer.perks.Util.NewItem;
 
-public class Send {
+public class PerkObject {
 
-    public static String prefix = ChatColor.DARK_GREEN + "Perks v" + Bukkit.getPluginManager().getPlugin("Perks").getDescription().getVersion() + ChatColor.GRAY + "// " + ChatColor.GREEN;
+    private ItemStack itemStack;
+    private Perk perk;
 
-    public static void player(Player p, String message){
-        p.sendMessage(prefix + message);
+    public PerkObject(Perk perk){
+        this.perk = perk;
+        this.itemStack = NewItem.createGuiItem(Material.MAP, ChatColor.GOLD + perk.getName());
     }
-    public static void console(String message) {Bukkit.getLogger().info("[Perks] " + message);}
+
+    public ItemStack getItemStack(){
+        return this.itemStack;
+    }
+
+    public Perk getPerk(){
+        return this.perk;
+    }
+
 }

@@ -30,38 +30,47 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.stroyer.perks.Perks.Perk;
+import org.stroyer.perks.Perks.PerkObject;
 import org.stroyer.perks.Player.PerksPlayer;
 import org.stroyer.perks.Util.FillBlank;
 import org.stroyer.perks.Util.NewItem;
 
-public class MainGUI {
-    public static Inventory inv = Bukkit.createInventory(null, 27, "Perks");
-    public static ItemStack myPerks = NewItem.createGuiItem(Material.EMERALD_BLOCK, ChatColor.GREEN + "My Perks", ChatColor.DARK_GREEN + "View and manage your perks!");
-    public static ItemStack allPerks = NewItem.createGuiItem(Material.GOLD_BLOCK, ChatColor.GOLD + "All perks", ChatColor.YELLOW + "View all perks");
-    public static ItemStack settings = NewItem.createGuiItem(Material.REDSTONE, ChatColor.GRAY + "Settings");
-    public static ItemStack playerDetails;
+import java.util.ArrayList;
+import java.util.List;
+
+public class MyPerks {
+
+    public static Inventory inv = Bukkit.createInventory(null, 54, "My Perks");
+    public static ItemStack back = NewItem.createGuiItem(Material.BARRIER, ChatColor.RED + "Back");
+    public static List<PerkObject> perkObjects = new ArrayList<>();
 
     public static void open(Player player){
+        PerksPlayer pp = PerksPlayer.getByPlayer(player);
+        for(Perk perk : pp.getPerks()){
+            perkObjects.add(new PerkObject(perk));
+        }
 
-        playerDetails = NewItem.createGuiItem(Material.PLAYER_HEAD, ChatColor.WHITE + "" + ChatColor.BOLD + player.getName(), ChatColor.DARK_PURPLE + "Tokens: " + ChatColor.LIGHT_PURPLE + PerksPlayer.getByPlayer(player).getTokens());
-        SkullMeta headMeta = (SkullMeta) playerDetails.getItemMeta();
-        headMeta.setOwner(player.getName());
-        playerDetails.setItemMeta(headMeta);
+        if(perkObjects.size() == 0){
+            inv.setItem(0, NewItem.createGuiItem(Material.BEDROCK, ChatColor.GRAY + "You don't have any perks!", "Buy some in the AllPerks tab!"));
+        }else{
+            for(PerkObject po : perkObjects){
+                inv.addItem(po.getItemStack());
+            }
+        }
 
-        inv.setItem(11, allPerks);
-        inv.setItem(13, myPerks);
-        inv.setItem(15, settings);
-        inv.setItem(26, playerDetails);
+        inv.setItem(53, back);
+
         inv = FillBlank.updateInventory(inv);
+
         player.openInventory(inv);
+
     }
 
-    public static void inventoryEvent(InventoryClickEvent e){
-        Player p = (Player) e.getWhoClicked();
-        if(e.getCurrentItem().equals(myPerks)){
-            MyPerks.open(p);
+    public static void event(InventoryClickEvent e){
+        if(e.getCurrentItem().equals(back)){
+            MainGUI.open((Player) e.getWhoClicked());
         }
     }
+
 }

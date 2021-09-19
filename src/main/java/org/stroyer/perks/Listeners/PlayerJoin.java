@@ -21,19 +21,23 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package org.stroyer.perks.Util;
+package org.stroyer.perks.Listeners;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.stroyer.perks.Main;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.stroyer.perks.Player.PerksPlayer;
+import org.stroyer.perks.Util.Send;
 
-public class Send {
-
-    public static String prefix = ChatColor.DARK_GREEN + "Perks v" + Bukkit.getPluginManager().getPlugin("Perks").getDescription().getVersion() + ChatColor.GRAY + "// " + ChatColor.GREEN;
-
-    public static void player(Player p, String message){
-        p.sendMessage(prefix + message);
+public class PlayerJoin implements Listener {
+    @EventHandler
+    public static void playerJoin(PlayerLoginEvent e){
+        if(PerksPlayer.getByPlayer(e.getPlayer()) != null){
+            Send.console(e.getPlayer().getName() + " already has a Perk profile. No need to generate a new one.");
+            return;
+        }else{
+            PerksPlayer newPlayer = new PerksPlayer(e.getPlayer());
+            Send.console(e.getPlayer().getName() + " does not have a Perk profile. Generating one now...");
+        }
     }
-    public static void console(String message) {Bukkit.getLogger().info("[Perks] " + message);}
 }

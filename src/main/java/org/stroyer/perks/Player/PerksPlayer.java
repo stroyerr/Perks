@@ -38,7 +38,39 @@ public class PerksPlayer implements Serializable {
     private List<Perk> perks;
     private int tokens;
 
+    public PerksPlayer(Player player, int tokens, List<Perk> perks){
+        this.perks = perks;
+        this.player = player;
+        this.tokens = tokens;
+        perksPlayers.add(this);
+    }
+
     public PerksPlayer(Player player){
+        this.player = player;
+        this.tokens = 0;
         this.perks = new ArrayList<>();
+        perksPlayers.add(this);
+    }
+
+    public List<Perk> getPerks() {
+        return this.perks;
+    }
+
+    public int getTokens(){
+        return this.tokens;
+    }
+
+    public static PerksPlayer getByPlayer(Player player){
+        if(perksPlayers == null){perksPlayers = new ArrayList<>();}
+        for(PerksPlayer pp : perksPlayers){
+            if(pp.getPlayer().getUniqueId().equals(player.getUniqueId())){
+                return pp;
+            }
+        }
+        return null;
+    }
+
+    public Player getPlayer(){
+        return this.player;
     }
 }

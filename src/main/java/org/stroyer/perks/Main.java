@@ -26,6 +26,7 @@ package org.stroyer.perks;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.stroyer.perks.Commands.GeneralCommand;
 import org.stroyer.perks.Listeners.InventoryClick;
+import org.stroyer.perks.Listeners.PlayerJoin;
 
 public final class Main extends JavaPlugin {
 
@@ -34,6 +35,7 @@ public final class Main extends JavaPlugin {
         // Plugin startup logic
 
         getCommand("perks").setExecutor(new GeneralCommand(this));
+        getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
         getServer().getPluginManager().registerEvents(new InventoryClick(), this);
 
 

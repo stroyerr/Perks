@@ -23,17 +23,28 @@
 
 package org.stroyer.perks.Listeners;
 
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.stroyer.perks.GUIs.AllPerks;
 import org.stroyer.perks.GUIs.MainGUI;
-import org.stroyer.perks.Util.Send;
+import org.stroyer.perks.GUIs.MyPerks;
 
 public class InventoryClick implements Listener {
-    public static void click(InventoryClickEvent e){
-        Send.console("click");
+
+    @EventHandler
+    public static void onClick(InventoryClickEvent e){
         if(e.getInventory().equals(MainGUI.inv)){
             e.setCancelled(true);
             MainGUI.inventoryEvent(e);
+        }
+        if(e.getInventory().equals(MyPerks.inv)){
+            e.setCancelled(true);
+            MyPerks.event(e);
+        }
+        if(e.getInventory().equals(AllPerks.inv)){
+            e.setCancelled(true);
+            AllPerks.event(e);
         }
     }
 }

@@ -24,5 +24,4 @@
 package org.stroyer.perks.Internal;
 
 public class Perks {
-
 }

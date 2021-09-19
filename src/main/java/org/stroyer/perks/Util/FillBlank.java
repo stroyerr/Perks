@@ -9,7 +9,7 @@ public class FillBlank {
     public static Inventory updateInventory(Inventory inv){
 
         Inventory newInv = inv;
-        ItemStack blank = NewItem.createGuiItem(Material.BLACK_STAINED_GLASS_PANE, " ", ChatColor.LIGHT_PURPLE + "Perks by Stroyer_");
+        ItemStack blank = NewItem.createGuiItem(Material.BLACK_STAINED_GLASS_PANE, ChatColor.DARK_PURPLE + "" + ChatColor.ITALIC + "Perks by Stroyer_");
 
         for(int i = 0; i < inv.getSize(); i++){
             if(inv.getItem(i) == null){
