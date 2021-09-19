@@ -21,38 +21,19 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package org.stroyer.perks.Perks;
+package org.stroyer.perks.Util;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.stroyer.perks.Main;
 
-public class Perk implements Serializable {
-    private String name;
-    private int cost;
-    private String[] description;
+public class Send {
 
-    private static List<Perk> allPerks = new ArrayList<>();
+    public static String prefix = ChatColor.DARK_GREEN + "Perks v" + Bukkit.getPluginManager().getPlugin("Perks").getDescription().getVersion() + ChatColor.GRAY + "// " + ChatColor.GREEN;
 
-    public Perk(String name, int cost, String[] description){
-        this.name = name;
-        this.cost = cost;
-        this.description = description;
+    public static void player(Player p, String message){
+        p.sendMessage(prefix + message);
     }
-
-    public static void initialise(){
-        allPerks.add(Solo);
-    }
-
-    public Perk get(String name){
-        for(Perk p : allPerks){
-            if(p.name.equals(name)){
-                return p;
-            }
-        }
-        return null;
-    }
-
-    public static Perk Solo = new Perk("Solo", 1, new String[]{"Expirience Solo Play!", "Toggle other players visibility!"});
-
+    public static void console(String message) {Bukkit.getLogger().info(prefix + message);}
 }

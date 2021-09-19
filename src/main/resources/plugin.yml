@@ -6,3 +6,8 @@ prefix: [ Perks by Stroyer ]
 authors: [ Stroyer_ ]
 description: Perks Plugin
 website: github.com/stroyerr
+commands:
+  perks:
+    description: Perks by Stroyer_
+    usage: /<command>
+    aliases: [p, perk, pp]

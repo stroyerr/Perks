@@ -21,38 +21,24 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package org.stroyer.perks.Perks;
+package org.stroyer.perks.Player;
+
+import org.bukkit.entity.Player;
+import org.stroyer.perks.Perks.Perk;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Perk implements Serializable {
-    private String name;
-    private int cost;
-    private String[] description;
+public class PerksPlayer implements Serializable {
 
-    private static List<Perk> allPerks = new ArrayList<>();
+    public static List<PerksPlayer> perksPlayers;
 
-    public Perk(String name, int cost, String[] description){
-        this.name = name;
-        this.cost = cost;
-        this.description = description;
+    private Player player;
+    private List<Perk> perks;
+    private int tokens;
+
+    public PerksPlayer(Player player){
+        this.perks = new ArrayList<>();
     }
-
-    public static void initialise(){
-        allPerks.add(Solo);
-    }
-
-    public Perk get(String name){
-        for(Perk p : allPerks){
-            if(p.name.equals(name)){
-                return p;
-            }
-        }
-        return null;
-    }
-
-    public static Perk Solo = new Perk("Solo", 1, new String[]{"Expirience Solo Play!", "Toggle other players visibility!"});
-
 }

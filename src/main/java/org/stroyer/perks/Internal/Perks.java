@@ -21,38 +21,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package org.stroyer.perks.Perks;
+package org.stroyer.perks.Internal;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-public class Perk implements Serializable {
-    private String name;
-    private int cost;
-    private String[] description;
-
-    private static List<Perk> allPerks = new ArrayList<>();
-
-    public Perk(String name, int cost, String[] description){
-        this.name = name;
-        this.cost = cost;
-        this.description = description;
-    }
-
-    public static void initialise(){
-        allPerks.add(Solo);
-    }
-
-    public Perk get(String name){
-        for(Perk p : allPerks){
-            if(p.name.equals(name)){
-                return p;
-            }
-        }
-        return null;
-    }
-
-    public static Perk Solo = new Perk("Solo", 1, new String[]{"Expirience Solo Play!", "Toggle other players visibility!"});
+public class Perks {
 
 }

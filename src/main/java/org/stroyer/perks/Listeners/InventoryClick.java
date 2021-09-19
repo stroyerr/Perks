@@ -21,38 +21,19 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package org.stroyer.perks.Perks;
+package org.stroyer.perks.Listeners;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.stroyer.perks.GUIs.MainGUI;
+import org.stroyer.perks.Util.Send;
 
-public class Perk implements Serializable {
-    private String name;
-    private int cost;
-    private String[] description;
-
-    private static List<Perk> allPerks = new ArrayList<>();
-
-    public Perk(String name, int cost, String[] description){
-        this.name = name;
-        this.cost = cost;
-        this.description = description;
-    }
-
-    public static void initialise(){
-        allPerks.add(Solo);
-    }
-
-    public Perk get(String name){
-        for(Perk p : allPerks){
-            if(p.name.equals(name)){
-                return p;
-            }
+public class InventoryClick implements Listener {
+    public static void click(InventoryClickEvent e){
+        Send.console("click");
+        if(e.getInventory().equals(MainGUI.inv)){
+            e.setCancelled(true);
+            MainGUI.inventoryEvent(e);
         }
-        return null;
     }
-
-    public static Perk Solo = new Perk("Solo", 1, new String[]{"Expirience Solo Play!", "Toggle other players visibility!"});
-
 }

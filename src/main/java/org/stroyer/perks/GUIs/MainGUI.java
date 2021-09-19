@@ -21,41 +21,35 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package org.stroyer.perks.Commands;
+package org.stroyer.perks.GUIs;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.stroyer.perks.GUIs.MainGUI;
-import org.stroyer.perks.Main;
-import org.stroyer.perks.Util.Send;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.stroyer.perks.Util.FillBlank;
+import org.stroyer.perks.Util.NewItem;
 
-public class GeneralCommand implements CommandExecutor {
+public class MainGUI {
+    public static Inventory inv = Bukkit.createInventory(null, 27, "Perks");
+    public static ItemStack myPerks = NewItem.createGuiItem(Material.EMERALD_BLOCK, ChatColor.GREEN + "My Perks", ChatColor.DARK_GREEN + "View and manage your perks!");
+    public static ItemStack allPerks = NewItem.createGuiItem(Material.GOLD_BLOCK, ChatColor.GOLD + "All perks", ChatColor.YELLOW + "View all perks");
+    public static ItemStack settings = NewItem.createGuiItem(Material.REDSTONE, ChatColor.GRAY + "Settings");
 
-    private final Main main;
-    public GeneralCommand(Main main) {this.main = main; }
+    public static void open(Player player){
+        inv.setItem(11, allPerks);
+        inv.setItem(13, myPerks);
+        inv.setItem(15, settings);
+        inv = FillBlank.updateInventory(inv);
+        player.openInventory(inv);
+    }
 
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public static void inventoryEvent(InventoryClickEvent e){
+        if(e.getCurrentItem().equals(myPerks)){
 
-        if(!(sender instanceof Player)){
-            Send.console("Perks by Stroyer_");
-            return true;
         }
-
-        Player player = (Player) sender;
-
-        if(args.length == 0){
-            Send.player(player, "Perks by Stroyer_");
-            MainGUI.open(player);
-            return true;
-        }
-
-        Send.player(player, ChatColor.RED + "Unkown command.");
-        return true;
     }
 }
