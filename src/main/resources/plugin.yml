@@ -1,0 +1,8 @@
+name: Perks
+version: ${project.version}
+main: org.stroyer.perks.Main
+api-version: 1.17
+prefix: [ Perks by Stroyer ]
+authors: [ Stroyer_ ]
+description: Perks Plugin
+website: github.com/stroyerr
