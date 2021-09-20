@@ -23,37 +23,83 @@
 
 package org.stroyer.perks.Player;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.stroyer.perks.Perks.Perk;
+import org.stroyer.perks.Tokens.Token;
+import org.stroyer.perks.Util.Send;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class PerksPlayer implements Serializable {
 
-    public static List<PerksPlayer> perksPlayers;
+    public static List<PerksPlayer> perksPlayers = new ArrayList<>();
 
-    private Player player;
+    private UUID playerUUID;
     private List<Perk> perks;
+    private List<Perk> activePerks = new ArrayList<>();
     private int tokens;
 
-    public PerksPlayer(Player player, int tokens, List<Perk> perks){
+    public PerksPlayer(Player player, int tokens, List<Perk> perks, List<Perk> activePerks){
         this.perks = perks;
-        this.player = player;
+        this.playerUUID = player.getUniqueId();
         this.tokens = tokens;
+        this.activePerks = activePerks;
+        perksPlayers.add(this);
+    }
+
+    public PerksPlayer(UUID playerUUID, int tokens, List<Perk> perks, List<Perk> activePerks){
+        this.perks = perks;
+        this.playerUUID = playerUUID;
+        this.tokens = tokens;
+        this.activePerks = activePerks;
         perksPlayers.add(this);
     }
 
     public PerksPlayer(Player player){
-        this.player = player;
+        this.playerUUID = player.getUniqueId();
         this.tokens = 0;
         this.perks = new ArrayList<>();
+        this.activePerks = new ArrayList<>();
         perksPlayers.add(this);
+    }
+
+    public List<Perk> getActivePerks(){
+        return this.activePerks;
+    }
+
+    public void setPerkActive(Perk perk){
+        if(this.getActivePerks().contains(perk)){
+            return;
+        }else if(!this.hasPerk(perk)){
+            return;
+        }
+
+        this.activePerks.add(perk);
+
+    }
+
+    public void removeActivePerk(Perk perk){
+        if(this.hasPerk(perk)){
+            if(this.getActivePerks().contains(perk)){
+                this.activePerks.remove(perk);
+            }
+        }
     }
 
     public List<Perk> getPerks() {
         return this.perks;
+    }
+
+    public Boolean hasPerk(Perk perk){
+        if(this.perks.contains(perk)){
+            return true;
+        }
+        return false;
     }
 
     public int getTokens(){
@@ -63,7 +109,7 @@ public class PerksPlayer implements Serializable {
     public static PerksPlayer getByPlayer(Player player){
         if(perksPlayers == null){perksPlayers = new ArrayList<>();}
         for(PerksPlayer pp : perksPlayers){
-            if(pp.getPlayer().getUniqueId().equals(player.getUniqueId())){
+            if(pp.playerUUID.equals(player.getUniqueId())){
                 return pp;
             }
         }
@@ -71,6 +117,41 @@ public class PerksPlayer implements Serializable {
     }
 
     public Player getPlayer(){
-        return this.player;
+        return Bukkit.getPlayer(this.playerUUID);
+    }
+
+    public void attemptPurchase(Perk perk){
+        if(this.getPerks().contains(perk)){Send.player(this.getPlayer(), ChatColor.RED + "You already have this perk!"); return;}
+        if(this.getTokens() >= perk.getCost()){
+            this.givePerk(perk);
+            this.tokens = this.tokens - perk.getCost();
+            Send.player(this.getPlayer(), ChatColor.GREEN + "Successfuly unlocked for the cost of " + perk.getCost() + "" + Token.getSymbol());
+        }else{
+            Send.player(this.getPlayer(), ChatColor.RED + "You do not have enough tokens to unlock this!");
+        }
+    }
+
+    public void giveToken(int amount){
+        this.tokens += amount;
+    }
+
+    public void givePerk(Perk perk){
+        this.perks.add(perk);
+    }
+
+    public void disable(){
+        for(Perk p : this.getPerks()){
+            switch (p.getName()){
+                case "Solo":
+                    for(Player player : Bukkit.getOnlinePlayers()){
+                        this.getPlayer().showPlayer(player);
+                    }
+                    this.removeActivePerk(Perk.Solo);
+            }
+        }
+    }
+
+    public UUID getPlayerUUID() {
+        return this.playerUUID;
     }
 }

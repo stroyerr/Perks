@@ -34,6 +34,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.stroyer.perks.Perks.Perk;
 import org.stroyer.perks.Perks.PerkObject;
 import org.stroyer.perks.Player.PerksPlayer;
+import org.stroyer.perks.Tokens.Token;
 import org.stroyer.perks.Util.FillBlank;
 import org.stroyer.perks.Util.NewItem;
 
@@ -51,10 +52,12 @@ public class AllPerks {
 
     public static void open(Player player){
 
+        perkObjects.clear();
+
         SkullMeta sm = (SkullMeta) playerDetails.getItemMeta();
         sm.setOwner(player.getName());
         sm.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + player.getName());
-        List<String> lore = Arrays.asList("Your tokens: " + PerksPlayer.getByPlayer(player).getTokens(), "You own " + PerksPlayer.getByPlayer(player).getPerks().size() + " perks");
+        List<String> lore = Arrays.asList(ChatColor.YELLOW + "" + PerksPlayer.getByPlayer(player).getTokens() + " " + Token.getSymbol() , "You own " + PerksPlayer.getByPlayer(player).getPerks().size() + " perks");
         sm.setLore(lore);
         playerDetails.setItemMeta(sm);
 
@@ -66,7 +69,13 @@ public class AllPerks {
             inv.setItem(0, NewItem.createGuiItem(Material.BEDROCK, ChatColor.GRAY + "There are no perks yet!", "Check back soon..."));
         }else{
             for(PerkObject po : perkObjects){
-                inv.addItem(po.getItemStack());
+                ItemStack i = po.getItemStack();
+                List<String> newLore = new ArrayList<>();
+                String s = ChatColor.YELLOW + "" + po.getPerk().getCost() + " " + Token.getSymbol();
+                newLore.add(s);
+                newLore.addAll(Arrays.asList(po.getPerk().getDescription()));
+                i.setLore(newLore);
+                inv.setItem(po.getPerk().getId(), i);
             }
         }
 
@@ -82,6 +91,13 @@ public class AllPerks {
     public static void event(InventoryClickEvent e){
         if(e.getCurrentItem().equals(back)){
             MainGUI.open((Player) e.getWhoClicked());
+            return;
+        }
+        for(PerkObject po : perkObjects){
+            if(po.getItemStack().equals(e.getCurrentItem())){
+                PerkPage.open((Player) e.getWhoClicked(), po.getPerk());
+                return;
+            }
         }
     }
 }

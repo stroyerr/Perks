@@ -32,6 +32,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.stroyer.perks.GUIs.MainGUI;
 import org.stroyer.perks.Main;
+import org.stroyer.perks.Player.PerksPlayer;
 import org.stroyer.perks.Util.Send;
 
 public class GeneralCommand implements CommandExecutor {
@@ -53,6 +54,36 @@ public class GeneralCommand implements CommandExecutor {
             Send.player(player, "Perks by Stroyer_");
             MainGUI.open(player);
             return true;
+        }
+
+        if(args.length == 2){
+            if(args[0].equalsIgnoreCase("givetoken")){
+                for(Player p : Bukkit.getOnlinePlayers()){
+                    if(p.getUniqueId().equals(Bukkit.getPlayer(args[1]).getUniqueId())){
+                        PerksPlayer.getByPlayer(player).giveToken(1);
+                        Send.player(player, "Gave " + args[1] + " a token.");
+                        Send.player(p, "You recieved a token!");
+                        return true;
+                    }
+                }
+                Send.player(player, ChatColor.RED + "Could not find player " + args[1]);
+                return true;
+            }
+        }
+
+        if(args.length == 3){
+            if(args[0].equalsIgnoreCase("givetoken")){
+                for(Player p : Bukkit.getOnlinePlayers()){
+                    if(p.getUniqueId().equals(Bukkit.getPlayer(args[1]).getUniqueId())){
+                        PerksPlayer.getByPlayer(player).giveToken(Integer.parseInt(args[2]));
+                        Send.player(player, "Gave " + args[1] + " " + args[2] + " tokens.");
+                        Send.player(p, "You recieved " + args[2] + " tokens!");
+                        return true;
+                    }
+                }
+                Send.player(player, ChatColor.RED + "Could not find player " + args[1]);
+                return true;
+            }
         }
 
         Send.player(player, ChatColor.RED + "Unkown command.");

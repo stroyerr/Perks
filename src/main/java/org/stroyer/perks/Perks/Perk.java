@@ -25,27 +25,47 @@ package org.stroyer.perks.Perks;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Perk implements Serializable {
     private String name;
     private int cost;
     private String[] description;
+    private int id;
 
-    private static List<Perk> allPerks = new ArrayList<>();
+    public static Perk Solo = new Perk("Solo", 1, new String[]{"Expirience Solo Play!", "Toggle other players visibility!"});
+
+
+    private static List<Perk> allPerks = Arrays.asList(new Perk[]{
+            Solo
+    });
 
     public Perk(String name, int cost, String[] description){
         this.name = name;
         this.cost = cost;
         this.description = description;
+        if(allPerks == null){
+            this.id = 0;
+        }else{
+            this.id = allPerks.size();
+        }
     }
 
     public static void initialise(){
         allPerks.add(Solo);
     }
 
+    public int getId(){
+        return this.id;
+    }
+
     public static List<Perk> getAllPerks() {
         return allPerks;
+    }
+
+    public int getCost(){
+        return this.cost;
     }
 
     public String getName(){
@@ -64,7 +84,4 @@ public class Perk implements Serializable {
         }
         return null;
     }
-
-    public static Perk Solo = new Perk("Solo", 1, new String[]{"Expirience Solo Play!", "Toggle other players visibility!"});
-
 }

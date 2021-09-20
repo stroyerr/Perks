@@ -25,8 +25,12 @@ package org.stroyer.perks;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.stroyer.perks.Commands.GeneralCommand;
+import org.stroyer.perks.Internal.PerkPlayerSerialization;
 import org.stroyer.perks.Listeners.InventoryClick;
 import org.stroyer.perks.Listeners.PlayerJoin;
+import org.stroyer.perks.Perks.PerkActions.PerkSoloCommand;
+
+import java.io.IOException;
 
 public final class Main extends JavaPlugin {
 
@@ -34,7 +38,12 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
 
+        try {
+            PerkPlayerSerialization.load();
+        } catch (IOException | ClassNotFoundException e) {}
+
         getCommand("perks").setExecutor(new GeneralCommand(this));
+        getCommand("solo").setExecutor(new PerkSoloCommand(this));
         getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
         getServer().getPluginManager().registerEvents(new InventoryClick(), this);
 
@@ -44,5 +53,9 @@ public final class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+
+        try {
+            PerkPlayerSerialization.save();
+        } catch (IOException e) {}
     }
 }

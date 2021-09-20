@@ -21,35 +21,10 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package org.stroyer.perks.Listeners;
+package org.stroyer.perks.Tokens;
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.stroyer.perks.GUIs.AllPerks;
-import org.stroyer.perks.GUIs.MainGUI;
-import org.stroyer.perks.GUIs.MyPerks;
-import org.stroyer.perks.GUIs.PerkPage;
-
-public class InventoryClick implements Listener {
-
-    @EventHandler
-    public static void onClick(InventoryClickEvent e){
-        if(e.getInventory().equals(MainGUI.inv)){
-            e.setCancelled(true);
-            MainGUI.inventoryEvent(e);
-        }
-        if(e.getInventory().equals(MyPerks.inv)){
-            e.setCancelled(true);
-            MyPerks.event(e);
-        }
-        if(e.getInventory().equals(AllPerks.inv)){
-            e.setCancelled(true);
-            AllPerks.event(e);
-        }
-        if(e.getInventory().equals(PerkPage.inv)){
-            e.setCancelled(true);
-            PerkPage.event(e);
-        }
+public class Token {
+    public static String getSymbol(){
+        return "⛂";
     }
 }

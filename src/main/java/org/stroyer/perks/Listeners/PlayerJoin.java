@@ -23,21 +23,29 @@
 
 package org.stroyer.perks.Listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.stroyer.perks.Player.PerksPlayer;
 import org.stroyer.perks.Util.Send;
 
 public class PlayerJoin implements Listener {
     @EventHandler
     public static void playerJoin(PlayerLoginEvent e){
-        if(PerksPlayer.getByPlayer(e.getPlayer()) != null){
-            Send.console(e.getPlayer().getName() + " already has a Perk profile. No need to generate a new one.");
-            return;
-        }else{
-            PerksPlayer newPlayer = new PerksPlayer(e.getPlayer());
-            Send.console(e.getPlayer().getName() + " does not have a Perk profile. Generating one now...");
-        }
+        BukkitRunnable br = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if(PerksPlayer.getByPlayer(e.getPlayer()) != null){
+                    Send.console(e.getPlayer().getName() + " already has a Perk profile. No need to generate a new one.");
+                    return;
+                }else{
+                    PerksPlayer newPlayer = new PerksPlayer(e.getPlayer());
+                    Send.console(e.getPlayer().getName() + " does not have a Perk profile. Generating one now...");
+                }
+            }
+        };
+        br.runTaskLater(Bukkit.getPluginManager().getPlugin("Perks"), 10L);
     }
 }

@@ -11,3 +11,7 @@ commands:
     description: Perks by Stroyer_
     usage: /<command>
     aliases: [p, perk, pp]
+  solo:
+    description: Player like it's single player!
+    usage: /<command>
+    aliases: [solo, soloplay]

@@ -32,40 +32,52 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.stroyer.perks.Perks.Perk;
 import org.stroyer.perks.Player.PerksPlayer;
 import org.stroyer.perks.Tokens.Token;
 import org.stroyer.perks.Util.FillBlank;
 import org.stroyer.perks.Util.NewItem;
 
-public class MainGUI {
-    public static Inventory inv = Bukkit.createInventory(null, 27, "Perks");
-    public static ItemStack myPerks = NewItem.createGuiItem(Material.EMERALD_BLOCK, ChatColor.GREEN + "My Perks", ChatColor.DARK_GREEN + "View and manage your perks!");
-    public static ItemStack allPerks = NewItem.createGuiItem(Material.GOLD_BLOCK, ChatColor.GOLD + "All perks", ChatColor.YELLOW + "View all perks");
-    public static ItemStack settings = NewItem.createGuiItem(Material.REDSTONE, ChatColor.GRAY + "Settings");
-    public static ItemStack playerDetails;
+import java.util.Arrays;
+import java.util.List;
 
-    public static void open(Player player){
+public class PerkPage {
+    public static Inventory inv = Bukkit.createInventory(null, 54, "");
+    public static ItemStack back = NewItem.createGuiItem(Material.BARRIER, ChatColor.RED + "Back");
+    public static ItemStack unlock = NewItem.createGuiItem(Material.EMERALD_BLOCK, ChatColor.GREEN + "Unlock now!");
+    private static Perk currentPerk;
 
-        playerDetails = NewItem.createGuiItem(Material.PLAYER_HEAD, ChatColor.WHITE + "" + ChatColor.BOLD + player.getName(), ChatColor.YELLOW + "" + ChatColor.LIGHT_PURPLE + PerksPlayer.getByPlayer(player).getTokens() + " " + Token.getSymbol());
-        SkullMeta headMeta = (SkullMeta) playerDetails.getItemMeta();
-        headMeta.setOwner(player.getName());
-        playerDetails.setItemMeta(headMeta);
+    public static void open(Player player, Perk perk){
+        currentPerk = perk;
+        PerksPlayer pp = PerksPlayer.getByPlayer(player);
+        ItemStack details = NewItem.createGuiItem(Material.PLAYER_HEAD, ChatColor.GRAY + player.getName());
+        ItemMeta unlockMeta = unlock.getItemMeta();
+        List<String> unlockLore = Arrays.asList(new String[]{
+                ChatColor.GOLD + perk.getName(), ChatColor.YELLOW + "" + perk.getCost() + "" + Token.getSymbol()
+        });
+        unlockMeta.setLore(unlockLore);
+        unlock.setItemMeta(unlockMeta);
 
-        inv.setItem(11, allPerks);
-        inv.setItem(13, myPerks);
-        inv.setItem(15, settings);
-        inv.setItem(26, playerDetails);
+        SkullMeta sm = (SkullMeta) details.getItemMeta();
+        sm.setOwner(player.getName());
+        sm.setDisplayName(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + player.getName());
+
+        inv.setItem(53, back);
+        inv.setItem(8, details);
+        inv.setItem(22, unlock);
+
         inv = FillBlank.updateInventory(inv);
         player.openInventory(inv);
     }
 
-    public static void inventoryEvent(InventoryClickEvent e){
-        Player p = (Player) e.getWhoClicked();
-        if(e.getCurrentItem().equals(myPerks)){
-            MyPerks.open(p);
+    public static void event(InventoryClickEvent e){
+        if(e.getCurrentItem().equals(back)){
+            AllPerks.open((Player) e.getWhoClicked());
         }
-        if(e.getCurrentItem().equals(allPerks)){
-            AllPerks.open(p);
+        if(e.getCurrentItem().equals(unlock)){
+            PerksPlayer.getByPlayer((Player) e.getWhoClicked()).attemptPurchase(currentPerk);
+            e.getWhoClicked().closeInventory();
         }
     }
+
 }
