@@ -28,6 +28,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.stroyer.perks.Perks.Perk;
 import org.stroyer.perks.Player.PerksPlayer;
 import org.stroyer.perks.Util.Send;
 
@@ -47,5 +48,12 @@ public class PlayerJoin implements Listener {
             }
         };
         br.runTaskLater(Bukkit.getPluginManager().getPlugin("Perks"), 10L);
+
+        for(PerksPlayer pp : PerksPlayer.perksPlayers){
+            if(pp.getActivePerks().contains(Perk.Solo)){
+                pp.getPlayer().hidePlayer(e.getPlayer());
+            }
+        }
+
     }
 }

@@ -33,6 +33,7 @@ public class Perk implements Serializable {
     private int cost;
     private String[] description;
     private int id;
+    private String[] usage;
 
     public static Perk Solo = new Perk("Solo", 1, new String[]{"Expirience Solo Play!", "Toggle other players visibility!"});
 

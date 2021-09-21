@@ -24,6 +24,7 @@
 package org.stroyer.perks.Perks.PerkActions;
 
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -58,7 +59,13 @@ public class PerkSoloCommand implements CommandExecutor {
         if(PerksPlayer.getByPlayer(p).getActivePerks().contains(Perk.Solo)){
             PerksPlayer.getByPlayer(p).removeActivePerk(Perk.Solo);
             Send.player(p, "Deactivated Solo Perk!");
+            for(Player player : Bukkit.getOnlinePlayers()){
+                p.showPlayer(player);
+            }
             return true;
+        }
+        for(Player player : Bukkit.getOnlinePlayers()){
+            p.hidePlayer(player);
         }
         PerksPlayer.getByPlayer(p).setPerkActive(Perk.Solo);
         Send.player(p, "Activated Solo Perk!");
