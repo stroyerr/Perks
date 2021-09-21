@@ -35,6 +35,9 @@ import org.stroyer.perks.Main;
 import org.stroyer.perks.Player.PerksPlayer;
 import org.stroyer.perks.Util.Send;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class GeneralCommand implements CommandExecutor {
 
     private final Main main;
@@ -54,6 +57,25 @@ public class GeneralCommand implements CommandExecutor {
             Send.player(player, "Perks by Stroyer_");
             MainGUI.open(player);
             return true;
+        }
+
+        if(args.length == 1){
+            if(args[0].equalsIgnoreCase("debug")){
+                if(player.hasPermission("perks.debug")){
+                    List<String> msg = Arrays.asList(
+                            ChatColor.GOLD + "PerksPlayer Array Size: " + ChatColor.YELLOW + PerksPlayer.perksPlayers.size(),
+                            ChatColor.GOLD + "PerksPlayerByPlayer found of sender: " + ChatColor.YELLOW + PerksPlayer.getByPlayer(player).getPlayer().getDisplayName() + ChatColor.GOLD + " with UUID of " + ChatColor.YELLOW + PerksPlayer.getByPlayer(player).getPlayerUUID(),
+                            ChatColor.GOLD + "PerksPlayerByPlayer perks of sender: " + ChatColor.YELLOW + "" + PerksPlayer.getByPlayer(player).getPerks().size(),
+                            ChatColor.GOLD + "Found PerksPlayer by sender UUID: " + ChatColor.YELLOW + (PerksPlayer.getByPlayer(player).getPlayer().equals(player)),
+                            ChatColor.GOLD + "PerksPlayer tokens of: " + ChatColor.YELLOW + PerksPlayer.getByPlayer(player).getTokens()
+                    );
+
+                    Send.playerMultipleLines(player, "Debug stats", msg);
+                }else{
+                    Send.player(player, ChatColor.RED + "You do not have sufficient permissions to execute this command.");
+                }
+                return true;
+            }
         }
 
         if(args.length == 2){

@@ -46,12 +46,22 @@ public class PerkPage {
     public static ItemStack back = NewItem.createGuiItem(Material.BARRIER, ChatColor.RED + "Back");
     public static ItemStack unlock = NewItem.createGuiItem(Material.EMERALD_BLOCK, ChatColor.GREEN + "Unlock now!");
     private static Perk currentPerk;
+    public static ItemStack usage;
+    public static ItemStack description;
 
     public static void open(Player player, Perk perk){
         currentPerk = perk;
         PerksPlayer pp = PerksPlayer.getByPlayer(player);
-        ItemStack details = NewItem.createGuiItem(Material.PLAYER_HEAD, ChatColor.GRAY + player.getName());
+        ItemStack details = NewItem.createGuiItem(Material.PLAYER_HEAD, ChatColor.GRAY + player.getName(), ChatColor.DARK_GRAY + "" + pp.getTokens() + "" + Token.getSymbol());
         ItemMeta unlockMeta = unlock.getItemMeta();
+        usage = NewItem.createGuiItem(Material.PAPER, ChatColor.GOLD + "Usage");
+        ItemMeta usageMeta = usage.getItemMeta();
+        usageMeta.setLore(Arrays.asList(perk.getUsage()));
+        usage.setItemMeta(usageMeta);
+        description = NewItem.createGuiItem(Material.FILLED_MAP, ChatColor.GOLD + "Description");
+        ItemMeta descMeta = description.getItemMeta();
+        descMeta.setLore(Arrays.asList(perk.getDescription()));
+        description.setItemMeta(descMeta);
         List<String> unlockLore = Arrays.asList(new String[]{
                 ChatColor.GOLD + perk.getName(), ChatColor.YELLOW + "" + perk.getCost() + "" + Token.getSymbol()
         });
@@ -62,9 +72,11 @@ public class PerkPage {
         sm.setOwner(player.getName());
         sm.setDisplayName(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + player.getName());
 
-        inv.setItem(53, back);
-        inv.setItem(8, details);
+        inv.setItem(45, back);
+        inv.setItem(53, details);
+        inv.setItem(20, description);
         inv.setItem(22, unlock);
+        inv.setItem(24, usage);
 
         inv = FillBlank.updateInventory(inv);
         player.openInventory(inv);
