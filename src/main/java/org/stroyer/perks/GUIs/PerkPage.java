@@ -52,7 +52,7 @@ public class PerkPage {
     public static void open(Player player, Perk perk){
         currentPerk = perk;
         PerksPlayer pp = PerksPlayer.getByPlayer(player);
-        ItemStack details = NewItem.createGuiItem(Material.PLAYER_HEAD, ChatColor.GRAY + player.getName(), ChatColor.GRAY + "" + pp.getTokens() + "" + Token.getSymbol());
+        ItemStack details = NewItem.createGuiItem(Material.PLAYER_HEAD, ChatColor.GRAY + player.getName(), ChatColor.DARK_GRAY + "" + pp.getTokens() + "" + Token.getSymbol());
         ItemMeta unlockMeta = unlock.getItemMeta();
         usage = NewItem.createGuiItem(Material.PAPER, ChatColor.GOLD + "Usage");
         ItemMeta usageMeta = usage.getItemMeta();

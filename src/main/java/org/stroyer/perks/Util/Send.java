@@ -28,6 +28,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.stroyer.perks.Main;
 
+import java.util.List;
+
 public class Send {
 
     public static String prefix = ChatColor.DARK_GREEN + "Perks v" + Bukkit.getPluginManager().getPlugin("Perks").getDescription().getVersion() + ChatColor.GRAY + "// " + ChatColor.GREEN;
@@ -36,4 +38,10 @@ public class Send {
         p.sendMessage(prefix + message);
     }
     public static void console(String message) {Bukkit.getLogger().info("[Perks] " + message);}
+    public static void playerMultipleLines(Player p, String firstLine, List<String> messages){
+        player(p, firstLine);
+        for(String s : messages){
+            p.sendMessage(s);
+        }
+    }
 }
