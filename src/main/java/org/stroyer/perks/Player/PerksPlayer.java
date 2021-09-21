@@ -75,20 +75,15 @@ public class PerksPlayer implements Serializable {
     public void setPerkActive(Perk perk){
         if(this.getActivePerks().contains(perk)){
             return;
-        }else if(!this.hasPerk(perk)){
-            return;
         }
 
+        Send.console("added");
         this.activePerks.add(perk);
 
     }
 
     public void removeActivePerk(Perk perk){
-        if(this.hasPerk(perk)){
-            if(this.getActivePerks().contains(perk)){
-                this.activePerks.remove(perk);
-            }
-        }
+        this.activePerks.remove(perk);
     }
 
     public List<Perk> getPerks() {
@@ -96,8 +91,10 @@ public class PerksPlayer implements Serializable {
     }
 
     public Boolean hasPerk(Perk perk){
-        if(this.perks.contains(perk)){
-            return true;
+        for(Perk p : this.getPerks()){
+            if(p.equals(perk)){
+                return true;
+            }
         }
         return false;
     }
@@ -109,7 +106,7 @@ public class PerksPlayer implements Serializable {
     public static PerksPlayer getByPlayer(Player player){
         if(perksPlayers == null){perksPlayers = new ArrayList<>();}
         for(PerksPlayer pp : perksPlayers){
-            if(pp.playerUUID.equals(player.getUniqueId())){
+            if(pp.getPlayer().equals(player)){
                 return pp;
             }
         }

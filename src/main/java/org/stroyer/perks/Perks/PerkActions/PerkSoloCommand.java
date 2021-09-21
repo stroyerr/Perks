@@ -33,8 +33,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.stroyer.perks.Main;
 import org.stroyer.perks.Perks.Perk;
+import org.stroyer.perks.Perks.PerkObject;
 import org.stroyer.perks.Player.PerksPlayer;
 import org.stroyer.perks.Util.Send;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class PerkSoloCommand implements CommandExecutor {
 
@@ -51,13 +56,25 @@ public class PerkSoloCommand implements CommandExecutor {
 
         Player p = (Player) sender;
 
-        if(!PerksPlayer.getByPlayer(p).hasPerk(Perk.Solo)){
-            Send.player(p, ChatColor.RED + "Unlock this perk with /perk");
+        List<Perk> perks = new ArrayList<>();
+        PerksPlayer pp = PerksPlayer.getByPlayer(p);
+        for(Perk perk : pp.getPerks()){
+            perks.add(perk);
+        }
+        Boolean found = false;
+        for(Perk prk : perks){
+            if(prk.getName().equals(Perk.Solo.getName())){
+                found = true;
+            }
+        }
+        if(!found){
+            Send.player(p, ChatColor.RED + "Unlock this in /perk");
             return true;
         }
 
-        if(PerksPlayer.getByPlayer(p).getActivePerks().contains(Perk.Solo)){
-            PerksPlayer.getByPlayer(p).removeActivePerk(Perk.Solo);
+
+        if(Objects.requireNonNull(PerksPlayer.getByPlayer(p)).getActivePerks().contains(Perk.Solo)){
+            Objects.requireNonNull(PerksPlayer.getByPlayer(p)).removeActivePerk(Perk.Solo);
             Send.player(p, "Deactivated Solo Perk!");
             for(Player player : Bukkit.getOnlinePlayers()){
                 p.showPlayer(player);
