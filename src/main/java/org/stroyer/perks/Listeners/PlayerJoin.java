@@ -28,7 +28,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.stroyer.perks.Commands.PerkPunchCommand;
 import org.stroyer.perks.Perks.Perk;
+import org.stroyer.perks.Perks.PunchGun.PunchGun;
 import org.stroyer.perks.Player.PerksPlayer;
 import org.stroyer.perks.Util.Send;
 
@@ -44,6 +46,9 @@ public class PlayerJoin implements Listener {
                 }else{
                     PerksPlayer newPlayer = new PerksPlayer(e.getPlayer());
                     Send.console(e.getPlayer().getName() + " does not have a Perk profile. Generating one now...");
+                }
+                if(e.getPlayer().getInventory().contains(PerkPunchCommand.punchGunItem)){
+                    PunchGun newGun = new PunchGun(e.getPlayer());
                 }
             }
         };

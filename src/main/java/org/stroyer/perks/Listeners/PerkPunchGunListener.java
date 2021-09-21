@@ -50,10 +50,12 @@ public class PerkPunchGunListener implements Listener {
             if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)){
                 if(PunchGun.hasPunchGun(e.getPlayer())){
                     PunchGun.getPunchGun(e.getPlayer()).attemptShoot();
+                    e.setCancelled(true);
                 }
             }else if(e.getAction().equals(Action.LEFT_CLICK_BLOCK) || e.getAction().equals(Action.LEFT_CLICK_AIR)){
                 if(PunchGun.hasPunchGun(e.getPlayer())){
                     PunchGun.getPunchGun(e.getPlayer()).attemptReload();
+                    e.setCancelled(true);
                 }
             }else{
                 Send.player(e.getPlayer(), ChatColor.RED + "Oi! You haven't unlocked this yet!");
