@@ -23,6 +23,7 @@
 
 package org.stroyer.perks.Perks.PunchGun;
 
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class PunchGun {
         return this.player;
     }
     public void attemptShoot(){
-
+        this.shoot();
     }
     public static Boolean hasPunchGun(Player player) {
         for(PunchGun pg : allGuns){
@@ -68,5 +69,14 @@ public class PunchGun {
             }
         }
         return null;
+    }
+
+    public void shoot(){
+        Fireball f = this.player.launchProjectile(Fireball.class);
+        f.setIsIncendiary(false);
+        f.setGlowing(true);
+        f.setInvulnerable(true);
+        f.setYield(0f);
+        f.set
     }
 }

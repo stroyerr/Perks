@@ -28,6 +28,7 @@ import org.stroyer.perks.Commands.GeneralCommand;
 import org.stroyer.perks.Commands.PerkPunchCommand;
 import org.stroyer.perks.Internal.PerkPlayerSerialization;
 import org.stroyer.perks.Listeners.InventoryClick;
+import org.stroyer.perks.Listeners.PerkPunchGunListener;
 import org.stroyer.perks.Listeners.PlayerJoin;
 import org.stroyer.perks.Commands.PerkSoloCommand;
 
@@ -46,6 +47,7 @@ public final class Main extends JavaPlugin {
         getCommand("punch").setExecutor(new PerkPunchCommand(this));
         getCommand("perks").setExecutor(new GeneralCommand(this));
         getCommand("solo").setExecutor(new PerkSoloCommand(this));
+        getServer().getPluginManager().registerEvents(new PerkPunchGunListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
         getServer().getPluginManager().registerEvents(new InventoryClick(), this);
 

@@ -23,19 +23,47 @@
 
 package org.stroyer.perks.Listeners;
 
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Fireball;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.stroyer.perks.Commands.PerkPunchCommand;
+import org.stroyer.perks.Perks.PunchGun.PunchGun;
+import org.stroyer.perks.Util.Send;
 
 public class PerkPunchGunListener implements Listener {
     @EventHandler
-    public static void playerClick(InventoryClickEvent e){
-        if(e.getCurrentItem().equals(PerkPunchCommand.punchGunItem)){
+    public static void playerClick(PlayerInteractEvent e){
+        if(e.getItem() == null){
+            return;
+        }
+        if(e.getItem().equals(PerkPunchCommand.punchGunItem)){
             if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)){
-
+                if(PunchGun.hasPunchGun(e.getPlayer())){
+                    PunchGun.getPunchGun(e.getPlayer()).attemptShoot();
+                }
+            }else{
+                Send.player(e.getPlayer(), ChatColor.RED + "Oi! You haven't unlocked this yet!");
             }
+        }
+    }
+
+    @EventHandler
+    public static void gunCollision(ProjectileHitEvent  e){
+        if(e.getEntity() instanceof Fireball){
+            e.setCancelled(true);
+            if(e.getHitEntity() != null){
+                return;
+            }
+            if(!(e.getHitEntity() instanceof Player)){
+                return;
+            }
+            e.getHitEntity()
         }
     }
 }
