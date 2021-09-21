@@ -31,6 +31,7 @@ import org.stroyer.perks.Listeners.InventoryClick;
 import org.stroyer.perks.Listeners.PerkPunchGunListener;
 import org.stroyer.perks.Listeners.PlayerJoin;
 import org.stroyer.perks.Commands.PerkSoloCommand;
+import org.stroyer.perks.Perks.PunchGun.PunchGun;
 
 import java.io.IOException;
 
@@ -50,6 +51,8 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PerkPunchGunListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
         getServer().getPluginManager().registerEvents(new InventoryClick(), this);
+
+        PunchGun.initialise();
 
 
     }

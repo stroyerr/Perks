@@ -23,6 +23,7 @@
 
 package org.stroyer.perks.Listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
@@ -30,8 +31,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 import org.stroyer.perks.Commands.PerkPunchCommand;
 import org.stroyer.perks.Perks.PunchGun.PunchGun;
 import org.stroyer.perks.Util.Send;
@@ -53,17 +57,24 @@ public class PerkPunchGunListener implements Listener {
         }
     }
 
+    private static Entity entityToKnockback = null;
+    static BukkitRunnable knockback = new BukkitRunnable() {
+        @Override
+        public void run() {
+            entityToKnockback.setVelocity(entityToKnockback.getVelocity().multiply(3));
+        }
+    };
+
     @EventHandler
-    public static void gunCollision(ProjectileHitEvent  e){
-        if(e.getEntity() instanceof Fireball){
-            e.setCancelled(true);
-            if(e.getHitEntity() != null){
+    public static void gunCollision(EntityDamageByEntityEvent e){
+        if(e.getDamager() instanceof Fireball){
+
+            if(e.getEntity() == null){
                 return;
             }
-            if(!(e.getHitEntity() instanceof Player)){
-                return;
-            }
-            e.getHitEntity()
+            entityToKnockback = e.getEntity();
+            knockback.runTaskLater(Bukkit.getPluginManager().getPlugin("Perks"), 5L);
+            e.setDamage(0);
         }
     }
 }

@@ -23,8 +23,15 @@
 
 package org.stroyer.perks.Perks.PunchGun;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.stroyer.perks.Commands.PerkPunchCommand;
+import org.stroyer.perks.Main;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +58,9 @@ public class PunchGun {
         return this.player;
     }
     public void attemptShoot(){
-        this.shoot();
+        if(this.canShoot){
+            this.shoot();
+        }
     }
     public static Boolean hasPunchGun(Player player) {
         for(PunchGun pg : allGuns){
@@ -77,6 +86,37 @@ public class PunchGun {
         f.setGlowing(true);
         f.setInvulnerable(true);
         f.setYield(0f);
-        f.set
+        this.rounds --;
+    }
+
+    private static BukkitRunnable ammoHud = new BukkitRunnable() {
+        @Override
+        public void run() {
+            ammoHudUpdate();
+        }
+    };
+
+    public static void initialise(){
+        ammoHud.runTaskTimer(Bukkit.getPluginManager().getPlugin("Perks"), 0L, 4L);
+    }
+
+    private static void ammoHudUpdate(){
+        for(PunchGun gun : allGuns){
+            if(gun.player.getItemInUse().equals(PerkPunchCommand.punchGunItem)){
+                if(gun.rounds > 0){
+                    if(gun.rounds == 3){
+                        gun.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + "███"));
+                    }
+                    if(gun.rounds == 2){
+                        gun.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + "██" + ChatColor.RED + "█"));
+                    }
+                    if(gun.rounds == 1){
+                        gun.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + "█" + ChatColor.RED + "██"));
+                    }
+                }else{
+                    gun.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GOLD + "" + ChatColor.BOLD + "You're out of ammo! Left Click to reload..."));
+                }
+            }
+        }
     }
 }
