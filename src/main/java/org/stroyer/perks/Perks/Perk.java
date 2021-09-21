@@ -35,22 +35,27 @@ public class Perk implements Serializable {
     private int id;
     private String[] usage;
 
-    public static Perk Solo = new Perk("Solo", 1, new String[]{"Expirience Solo Play!", "Toggle other players visibility!"});
+    public static Perk Solo = new Perk("Solo", 1, new String[]{"Expirience Solo Play!", "Toggle other players visibility!"}, new String[]{"Use /solo to toggle this perk"});
 
 
     private static List<Perk> allPerks = Arrays.asList(new Perk[]{
             Solo
     });
 
-    public Perk(String name, int cost, String[] description){
+    public Perk(String name, int cost, String[] description, String[] usage){
         this.name = name;
         this.cost = cost;
+        this.usage = usage;
         this.description = description;
         if(allPerks == null){
             this.id = 0;
         }else{
             this.id = allPerks.size();
         }
+    }
+
+    public String[] getUsage(){
+        return this.usage;
     }
 
     public static void initialise(){
