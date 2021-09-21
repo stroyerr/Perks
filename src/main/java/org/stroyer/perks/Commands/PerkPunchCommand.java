@@ -21,71 +21,56 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package org.stroyer.perks.Perks.PerkActions;
+package org.stroyer.perks.Commands;
 
-
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.stroyer.perks.Main;
 import org.stroyer.perks.Perks.Perk;
-import org.stroyer.perks.Perks.PerkObject;
 import org.stroyer.perks.Player.PerksPlayer;
+import org.stroyer.perks.Util.NewItem;
 import org.stroyer.perks.Util.Send;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+public class PerkPunchCommand implements CommandExecutor {
 
-public class PerkSoloCommand implements CommandExecutor {
+    public static ItemStack punchGunItem = NewItem.createGuiItem(Material.BLAZE_ROD, ChatColor.GOLD + "" + ChatColor.BOLD + "Punch Gun", ChatColor.RED + "Knock other players back!");
 
     private final Main main;
-    public PerkSoloCommand(Main main) {this.main = main; }
+    public PerkPunchCommand(Main main) {
+        this.main = main;
+    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-
         if(!(sender instanceof Player)){
             Send.console("A player must execute this command.");
             return true;
         }
-
         Player p = (Player) sender;
-
-        List<Perk> perks = new ArrayList<>();
-        PerksPlayer pp = PerksPlayer.getByPlayer(p);
-        for(Perk perk : pp.getPerks()){
-            perks.add(perk);
-        }
-        Boolean found = false;
-        for(Perk prk : perks){
-            if(prk.getName().equals(Perk.Solo.getName())){
-                found = true;
-            }
-        }
-        if(!found){
-            Send.player(p, ChatColor.RED + "Unlock this in /perk");
+        if(!PerksPlayer.getByPlayer(p).hasPerk(Perk.PunchGun)){
+            Send.player(p, ChatColor.RED + "Unlock this perk in /perks");
             return true;
         }
 
+        if(p.getInventory().getItemInMainHand().getType().isItem()){
+            if(p.getInventory().getItemInMainHand().getType() != null){
+                if(!p.getInventory().getItemInMainHand().getType().isAir()){
+                    p.getWorld().dropItem(p.getLocation(), p.getInventory().getItemInMainHand());
+                }
 
-        if(Objects.requireNonNull(PerksPlayer.getByPlayer(p)).getActivePerks().contains(Perk.Solo)){
-            Objects.requireNonNull(PerksPlayer.getByPlayer(p)).removeActivePerk(Perk.Solo);
-            Send.player(p, "Deactivated Solo Perk!");
-            for(Player player : Bukkit.getOnlinePlayers()){
-                p.showPlayer(player);
             }
-            return true;
         }
-        for(Player player : Bukkit.getOnlinePlayers()){
-            p.hidePlayer(player);
-        }
-        PerksPlayer.getByPlayer(p).setPerkActive(Perk.Solo);
-        Send.player(p, "Activated Solo Perk!");
+
+        if(p.getInventory().getItemInMainHand().equals(punchGunItem)){return true;}
+
+
+        p.setItemInHand(punchGunItem);
 
         return true;
     }

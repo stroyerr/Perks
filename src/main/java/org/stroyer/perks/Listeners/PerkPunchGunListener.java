@@ -21,43 +21,21 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package org.stroyer.perks;
+package org.stroyer.perks.Listeners;
 
-import org.bukkit.plugin.java.JavaPlugin;
-import org.stroyer.perks.Commands.GeneralCommand;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.stroyer.perks.Commands.PerkPunchCommand;
-import org.stroyer.perks.Internal.PerkPlayerSerialization;
-import org.stroyer.perks.Listeners.InventoryClick;
-import org.stroyer.perks.Listeners.PlayerJoin;
-import org.stroyer.perks.Commands.PerkSoloCommand;
 
-import java.io.IOException;
-
-public final class Main extends JavaPlugin {
-
-    @Override
-    public void onEnable() {
-        // Plugin startup logic
-
-        try {
-            PerkPlayerSerialization.load();
-        } catch (IOException | ClassNotFoundException e) {}
-
-        getCommand("punch").setExecutor(new PerkPunchCommand(this));
-        getCommand("perks").setExecutor(new GeneralCommand(this));
-        getCommand("solo").setExecutor(new PerkSoloCommand(this));
-        getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
-        getServer().getPluginManager().registerEvents(new InventoryClick(), this);
-
-
-    }
-
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
-
-        try {
-            PerkPlayerSerialization.save();
-        } catch (IOException e) {}
+public class PerkPunchGunListener implements Listener {
+    @EventHandler
+    public static void playerClick(InventoryClickEvent e){
+        if(e.getCurrentItem().equals(PerkPunchCommand.punchGunItem)){
+            if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)){
+                
+            }
+        }
     }
 }

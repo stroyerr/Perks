@@ -36,11 +36,10 @@ public class Perk implements Serializable {
     private String[] usage;
 
     public static Perk Solo = new Perk("Solo", 1, new String[]{"Expirience Solo Play!", "Toggle other players visibility!"}, new String[]{"Use /solo to toggle this perk"});
+    public static Perk PunchGun = new Perk("Punch Gun", 1, new String[]{"Knock other players back!", "Use your punch gun to gain distance!"}, new String[]{"Use /punch to get your", "punch gun!"});
 
 
-    private static List<Perk> allPerks = Arrays.asList(new Perk[]{
-            Solo
-    });
+    private static List<Perk> allPerks = Arrays.asList(Solo, PunchGun);
 
     public Perk(String name, int cost, String[] description, String[] usage){
         this.name = name;
@@ -49,8 +48,11 @@ public class Perk implements Serializable {
         this.description = description;
         if(allPerks == null){
             this.id = 0;
+            allPerks = new ArrayList<>();
+            allPerks.add(this);
         }else{
             this.id = allPerks.size();
+            allPerks.add(this);
         }
     }
 
