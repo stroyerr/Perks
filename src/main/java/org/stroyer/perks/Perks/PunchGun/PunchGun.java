@@ -25,14 +25,19 @@ package org.stroyer.perks.Perks.PunchGun;
 
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PunchGun {
     private Player player;
     private int rounds;
     private Boolean canShoot;
+    private static List<PunchGun> allGuns = new ArrayList<>();
     public PunchGun(Player player){
         this.player = player;
         this.rounds = 3;
         this.canShoot = true;
+        allGuns.add(this);
     }
 
     public Boolean canShoot(){
@@ -43,5 +48,25 @@ public class PunchGun {
     }
     public Player getPlayer(){
         return this.player;
+    }
+    public void attemptShoot(){
+
+    }
+    public static Boolean hasPunchGun(Player player) {
+        for(PunchGun pg : allGuns){
+            if(pg.getPlayer().equals(player)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static PunchGun getPunchGun(Player player){
+        for(PunchGun pg : allGuns){
+            if(pg.getPlayer().equals(player)){
+                return pg;
+            }
+        }
+        return null;
     }
 }

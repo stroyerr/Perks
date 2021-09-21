@@ -34,7 +34,7 @@ public class PerkPunchGunListener implements Listener {
     public static void playerClick(InventoryClickEvent e){
         if(e.getCurrentItem().equals(PerkPunchCommand.punchGunItem)){
             if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)){
-                
+
             }
         }
     }
