@@ -25,6 +25,7 @@ package org.stroyer.perks.Perks.PunchGun;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Fireball;
@@ -32,6 +33,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.stroyer.perks.Commands.PerkPunchCommand;
 import org.stroyer.perks.Main;
+import org.stroyer.perks.Util.Send;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,10 +43,15 @@ public class PunchGun {
     private int rounds;
     private Boolean canShoot;
     private static List<PunchGun> allGuns = new ArrayList<>();
+    private Boolean isReloading;
+    private static List<PunchGun> currentReloading = new ArrayList<>();
+    private int reloadSecondsElapsed;
     public PunchGun(Player player){
         this.player = player;
         this.rounds = 3;
         this.canShoot = true;
+        this.isReloading = false;
+        this.reloadSecondsElapsed = 0;
         allGuns.add(this);
     }
 
@@ -58,7 +65,7 @@ public class PunchGun {
         return this.player;
     }
     public void attemptShoot(){
-        if(this.canShoot){
+        if(this.rounds > 0){
             this.shoot();
         }
     }
@@ -102,20 +109,61 @@ public class PunchGun {
 
     private static void ammoHudUpdate(){
         for(PunchGun gun : allGuns){
-            if(gun.player.getItemInUse().equals(PerkPunchCommand.punchGunItem)){
+            if(gun.player.getInventory().getItemInMainHand() == null){return;}
+            if(gun.player.getInventory().getItemInMainHand().equals(PerkPunchCommand.punchGunItem)){
                 if(gun.rounds > 0){
                     if(gun.rounds == 3){
-                        gun.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + "███"));
+                        gun.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.DARK_GREEN + "▍▍▍"));
                     }
                     if(gun.rounds == 2){
-                        gun.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + "██" + ChatColor.RED + "█"));
+                        gun.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.DARK_GREEN + "▍▍" + ChatColor.RED + "▍"));
                     }
                     if(gun.rounds == 1){
-                        gun.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + "█" + ChatColor.RED + "██"));
+                        gun.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.DARK_GREEN + "▍" + ChatColor.RED + "▍▍"));
                     }
                 }else{
-                    gun.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GOLD + "" + ChatColor.BOLD + "You're out of ammo! Left Click to reload..."));
+                    if(gun.isReloading){return;}
+                    gun.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED + "Left click to reload"));
                 }
+            }
+        }
+    }
+
+    public void attemptReload(){
+        if(this.isReloading){
+            Send.player(this.player, ChatColor.RED + "Already reloading.");
+            return;
+        }
+        if(this.rounds > 0){
+            Send.player(this.player, ChatColor.RED + "Your gun is already reloaded.");
+            return;
+        }
+        this.reload();
+    }
+
+    public void reload(){
+        currentReloading.add(this);
+        this.isReloading = true;
+        this.reloadSecondsElapsed = 0;
+        BukkitRunnable reloadRunnable = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if(currentReloading.size() == 0){this.cancel();}
+                reloadUpdate();
+            }
+        };
+        reloadRunnable.runTaskTimer(Bukkit.getPluginManager().getPlugin("Perks"), 0L, 20L);
+    }
+
+    public static void reloadUpdate(){
+        for(PunchGun gun : currentReloading){
+            gun.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent( ChatColor.GRAY + StringUtils.repeat("▍", (gun.reloadSecondsElapsed)) + ChatColor.WHITE + StringUtils.repeat("▍", (5-gun.reloadSecondsElapsed))));
+            gun.reloadSecondsElapsed ++;
+            if(gun.reloadSecondsElapsed == 5){
+                gun.isReloading = false;
+                gun.rounds = 3;
+                gun.reloadSecondsElapsed = 0;
+                currentReloading.remove(gun);
             }
         }
     }
