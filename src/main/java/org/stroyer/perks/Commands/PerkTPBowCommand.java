@@ -33,6 +33,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.stroyer.perks.Main;
 import org.stroyer.perks.Perks.Perk;
+import org.stroyer.perks.Perks.TPBow;
 import org.stroyer.perks.Player.PerksPlayer;
 import org.stroyer.perks.Util.NewItem;
 import org.stroyer.perks.Util.Send;
@@ -59,6 +60,7 @@ public class PerkTPBowCommand implements CommandExecutor {
                 }
             }
         }
+        TPBow newBow = new TPBow(p);
         p.getInventory().setItemInMainHand(tpBowItem);
         return true;
     }

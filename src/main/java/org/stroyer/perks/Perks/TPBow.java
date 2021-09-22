@@ -23,29 +23,35 @@
 
 package org.stroyer.perks.Perks;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.stroyer.perks.Util.Send;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TPBow {
     private Player player;
-    private int timeElapsed;
+    private int reloadTimeElapsed;
     private boolean isReloading;
     private static List<TPBow> allBows = new ArrayList<>();
+    private static List<TPBow> reloadingBows = new ArrayList<>();
     public TPBow(Player p){
         this.player = p;
-        this.timeElapsed = 0;
+        this.reloadTimeElapsed = 0;
         this.isReloading = false;
+        allBows.add(this);
     }
 
     public void attemptReload(){
         if(this.isReloading){
-            Send.player(this.player, ChatColor.RED + "You're");
             return;
         }
+        this.reload();
     }
 
     public static TPBow getTPBow(Player player){
@@ -55,5 +61,48 @@ public class TPBow {
             }
         }
         return null;
+    }
+
+    private void reload(){
+        if(!reloadTimerActive){
+            reloadTimer.runTaskTimer(Bukkit.getPluginManager().getPlugin("Perks"), 0L, 2L);
+        }
+        reloadingBows.add(this);
+        this.isReloading = true;
+    }
+
+    private static boolean reloadTimerActive = false;
+
+    private static BukkitRunnable reloadTimer = new BukkitRunnable() {
+        @Override
+        public void run() {
+            reloadTimerActive = true;
+            if(reloadingBows.size() == 0){
+                reloadTimerActive = false;
+                this.cancel();
+            }
+            reloadTimerEvent();
+        }
+    };
+
+    private static void reloadTimerEvent(){
+        for(TPBow bow : allBows){
+            if(bow.isReloading){
+                if(bow.reloadTimeElapsed == 20){
+                    bow.isReloading = false;
+                    bow.reloadTimeElapsed = 0;
+                    reloadingBows.remove(bow);
+                    if(reloadingBows.size() == 0){
+                        reloadTimer.cancel();
+                    }
+                }
+                bow.reloadTimeElapsed ++;
+                bow.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent( ChatColor.DARK_GREEN + StringUtils.repeat("▍", (bow.reloadTimeElapsed)) + ChatColor.RED + StringUtils.repeat("▍", (10-bow.reloadTimeElapsed))));
+            }
+        }
+    }
+
+    public boolean isReloading() {
+        return this.isReloading;
     }
 }

@@ -34,6 +34,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.stroyer.perks.Commands.PerkTPBowCommand;
 import org.stroyer.perks.Perks.Perk;
+import org.stroyer.perks.Perks.TPBow;
 import org.stroyer.perks.Player.PerksPlayer;
 import org.stroyer.perks.Util.PlaySound;
 import org.stroyer.perks.Util.Send;
@@ -54,9 +55,16 @@ public class PerkTPBowListener implements Listener {
         if(!(e.getAction().isRightClick())){
             return;
         }
+        if(TPBow.getTPBow(e.getPlayer()) == null){
+            return;
+        }
+        if(TPBow.getTPBow(e.getPlayer()).isReloading()){
+            return;
+        }
         e.getPlayer().launchProjectile(Arrow.class, e.getPlayer().getLocation().getDirection());
         e.setCancelled(true);
         tpArrows.add(e.getPlayer());
+        TPBow.getTPBow(e.getPlayer()).attemptReload();
     }
     @EventHandler
     public static void arrowHit(ProjectileHitEvent e){
