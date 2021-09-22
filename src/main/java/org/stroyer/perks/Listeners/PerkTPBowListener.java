@@ -25,9 +25,11 @@ package org.stroyer.perks.Listeners;
 
 import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.stroyer.perks.Commands.PerkTPBowCommand;
@@ -36,7 +38,11 @@ import org.stroyer.perks.Player.PerksPlayer;
 import org.stroyer.perks.Util.PlaySound;
 import org.stroyer.perks.Util.Send;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PerkTPBowListener implements Listener {
+    private static List<Player> tpArrows = new ArrayList<>();
     @EventHandler
     public static void bowUse(PlayerInteractEvent e){
         if(!(PerksPlayer.getByPlayer(e.getPlayer()).hasPerk(Perk.TPBow))){
@@ -50,6 +56,7 @@ public class PerkTPBowListener implements Listener {
         }
         e.getPlayer().launchProjectile(Arrow.class, e.getPlayer().getLocation().getDirection());
         e.setCancelled(true);
+        tpArrows.add(e.getPlayer());
     }
     @EventHandler
     public static void arrowHit(ProjectileHitEvent e){
@@ -57,10 +64,11 @@ public class PerkTPBowListener implements Listener {
             return;
         }
         Player p = (Player) e.getEntity().getShooter();
-        if(p.getInventory().getItemInMainHand().equals(PerkTPBowCommand.tpBowItem)){
+        if(tpArrows.contains(p)){
             p.teleport(e.getEntity().getLocation());
             PlaySound.player(p, Sound.ENTITY_ENDERMAN_TELEPORT);
             e.getEntity().remove();
+            tpArrows.remove(p);
         }
     }
 }
