@@ -95,7 +95,6 @@ public class PunchGun {
         Fireball f = this.player.launchProjectile(Fireball.class);
         f.setIsIncendiary(false);
         f.setGlowing(true);
-        f.setInvulnerable(true);
         f.setYield(0f);
         PlaySound.player(this.player, Sound.ENTITY_BLAZE_SHOOT);
         this.rounds --;

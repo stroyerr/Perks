@@ -19,3 +19,7 @@ commands:
     description: Spawn in your punch gun!
     usage: /<command>
     aliases: [punchgun, punchg, pgun, gun]
+  tpbow:
+    description: Get your TP bow!
+    usage: /<command>
+    aliases: [teleportbow, tpgun, teleportgun, bow, tpb]
