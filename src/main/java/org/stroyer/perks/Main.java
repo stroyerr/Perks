@@ -27,11 +27,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.stroyer.perks.Commands.*;
 import org.stroyer.perks.Internal.PerkPlayerSerialization;
 import org.stroyer.perks.Listeners.*;
-<<<<<<< Updated upstream
-=======
 import org.stroyer.perks.Perks.Launch;
 import org.stroyer.perks.Perks.Parachute;
->>>>>>> Stashed changes
+import org.stroyer.perks.Perks.Parachute;
 import org.stroyer.perks.Perks.PunchGun.PunchGun;
 import org.stroyer.perks.Perks.TPBow;
 
@@ -52,6 +50,7 @@ public final class Main extends JavaPlugin {
         getCommand("solo").setExecutor(new PerkSoloCommand(this));
         getCommand("tpbow").setExecutor(new PerkTPBowCommand(this));
         getCommand("superspy").setExecutor(new PerkSuperSpyCommand(this));
+        getServer().getPluginManager().registerEvents(new PerkParachuteListener(), this);
         getServer().getPluginManager().registerEvents(new PerkSuperSpyListener(), this);
         getServer().getPluginManager().registerEvents(new PerkTPBowListener(), this);
         getServer().getPluginManager().registerEvents(new PerkPunchGunListener(), this);
@@ -60,11 +59,9 @@ public final class Main extends JavaPlugin {
 
         PunchGun.initialise();
         TPBow.initialise();
-<<<<<<< Updated upstream
-=======
         Parachute.intitialise();
         Launch.initialise();
->>>>>>> Stashed changes
+        Parachute.intitialise();
 
 
     }

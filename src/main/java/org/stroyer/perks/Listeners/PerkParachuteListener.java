@@ -1,4 +1,3 @@
-
 /*
  * Copyright © 2021 stroyerr
  *
@@ -24,10 +23,20 @@
 
 package org.stroyer.perks.Listeners;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.stroyer.perks.Perks.Parachute;
 
-public class PerkLaunchListener implements Listener {
-package org.stroyer.perks.Listeners;public class PerkLaunchListener {
+public class PerkParachuteListener implements Listener {
+    @EventHandler
+    public static void onDamage(EntityDamageEvent e){
+        if(!(e.getEntity() instanceof Player)){return;}
+        if(e.getCause().equals(EntityDamageEvent.DamageCause.FALL)){
+            if(Parachute.getParachute((Player) e.getEntity()) != null){
+                e.setCancelled(true);
+            }
+        }
+    }
 }
