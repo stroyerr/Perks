@@ -25,10 +25,15 @@ package org.stroyer.perks;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.stroyer.perks.Commands.GeneralCommand;
+import org.stroyer.perks.Commands.PerkPunchCommand;
+import org.stroyer.perks.Commands.PerkTPBowCommand;
 import org.stroyer.perks.Internal.PerkPlayerSerialization;
 import org.stroyer.perks.Listeners.InventoryClick;
+import org.stroyer.perks.Listeners.PerkPunchGunListener;
+import org.stroyer.perks.Listeners.PerkTPBowListener;
 import org.stroyer.perks.Listeners.PlayerJoin;
-import org.stroyer.perks.Perks.PerkActions.PerkSoloCommand;
+import org.stroyer.perks.Commands.PerkSoloCommand;
+import org.stroyer.perks.Perks.PunchGun.PunchGun;
 
 import java.io.IOException;
 
@@ -42,10 +47,16 @@ public final class Main extends JavaPlugin {
             PerkPlayerSerialization.load();
         } catch (IOException | ClassNotFoundException e) {}
 
+        getCommand("punch").setExecutor(new PerkPunchCommand(this));
         getCommand("perks").setExecutor(new GeneralCommand(this));
         getCommand("solo").setExecutor(new PerkSoloCommand(this));
+        getCommand("tpbow").setExecutor(new PerkTPBowCommand(this));
+        getServer().getPluginManager().registerEvents(new PerkTPBowListener(), this);
+        getServer().getPluginManager().registerEvents(new PerkPunchGunListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
         getServer().getPluginManager().registerEvents(new InventoryClick(), this);
+
+        PunchGun.initialise();
 
 
     }

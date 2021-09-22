@@ -23,42 +23,44 @@
 
 package org.stroyer.perks.Listeners;
 
-import org.bukkit.Bukkit;
+import org.bukkit.Sound;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.stroyer.perks.Commands.PerkPunchCommand;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.stroyer.perks.Commands.PerkTPBowCommand;
 import org.stroyer.perks.Perks.Perk;
-import org.stroyer.perks.Perks.PunchGun.PunchGun;
 import org.stroyer.perks.Player.PerksPlayer;
+import org.stroyer.perks.Util.PlaySound;
 import org.stroyer.perks.Util.Send;
 
-public class PlayerJoin implements Listener {
+public class PerkTPBowListener implements Listener {
     @EventHandler
-    public static void playerJoin(PlayerLoginEvent e){
-        BukkitRunnable br = new BukkitRunnable() {
-            @Override
-            public void run() {
-                if(PerksPlayer.getByPlayer(e.getPlayer()) != null){
-                    Send.console(e.getPlayer().getName() + " already has a Perk profile. No need to generate a new one.");
-                    return;
-                }else{
-                    PerksPlayer newPlayer = new PerksPlayer(e.getPlayer());
-                    Send.console(e.getPlayer().getName() + " does not have a Perk profile. Generating one now...");
-                }
-                if(e.getPlayer().getInventory().contains(PerkPunchCommand.punchGunItem)){
-                    PunchGun newGun = new PunchGun(e.getPlayer());
-                }
-            }
-        };
-        br.runTaskLater(Bukkit.getPluginManager().getPlugin("Perks"), 10L);
-
-        for(PerksPlayer pp : PerksPlayer.perksPlayers){
-            if(pp.getActivePerks().contains(Perk.Solo)){
-                pp.getPlayer().hidePlayer(e.getPlayer());
-            }
+    public static void bowUse(PlayerInteractEvent e){
+        if(!(PerksPlayer.getByPlayer(e.getPlayer()).hasPerk(Perk.TPBow))){
+            return;
         }
-
+        if(!(e.getItem().equals(PerkTPBowCommand.tpBowItem))){
+            return;
+        }
+        if(!(e.getAction().isRightClick())){
+            return;
+        }
+        e.getPlayer().launchProjectile(Arrow.class, e.getPlayer().getLocation().getDirection());
+        e.setCancelled(true);
+    }
+    @EventHandler
+    public static void arrowHit(ProjectileHitEvent e){
+        if(!(e.getEntity().getShooter() instanceof Player)){
+            return;
+        }
+        Player p = (Player) e.getEntity().getShooter();
+        if(p.getInventory().getItemInMainHand().equals(PerkTPBowCommand.tpBowItem)){
+            p.teleport(e.getEntity().getLocation());
+            PlaySound.player(p, Sound.ENTITY_ENDERMAN_TELEPORT);
+            e.getEntity().remove();
+        }
     }
 }
