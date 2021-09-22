@@ -34,6 +34,7 @@ import org.stroyer.perks.Listeners.PerkTPBowListener;
 import org.stroyer.perks.Listeners.PlayerJoin;
 import org.stroyer.perks.Commands.PerkSoloCommand;
 import org.stroyer.perks.Perks.PunchGun.PunchGun;
+import org.stroyer.perks.Perks.TPBow;
 
 import java.io.IOException;
 
@@ -57,6 +58,7 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new InventoryClick(), this);
 
         PunchGun.initialise();
+        TPBow.initialise();
 
 
     }
