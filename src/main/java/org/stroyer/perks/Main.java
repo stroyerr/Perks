@@ -24,15 +24,12 @@
 package org.stroyer.perks;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import org.stroyer.perks.Commands.GeneralCommand;
-import org.stroyer.perks.Commands.PerkPunchCommand;
-import org.stroyer.perks.Commands.PerkTPBowCommand;
+import org.stroyer.perks.Commands.*;
 import org.stroyer.perks.Internal.PerkPlayerSerialization;
 import org.stroyer.perks.Listeners.InventoryClick;
 import org.stroyer.perks.Listeners.PerkPunchGunListener;
 import org.stroyer.perks.Listeners.PerkTPBowListener;
 import org.stroyer.perks.Listeners.PlayerJoin;
-import org.stroyer.perks.Commands.PerkSoloCommand;
 import org.stroyer.perks.Perks.PunchGun.PunchGun;
 import org.stroyer.perks.Perks.TPBow;
 
@@ -52,6 +49,7 @@ public final class Main extends JavaPlugin {
         getCommand("perks").setExecutor(new GeneralCommand(this));
         getCommand("solo").setExecutor(new PerkSoloCommand(this));
         getCommand("tpbow").setExecutor(new PerkTPBowCommand(this));
+        getCommand("superspy").setExecutor(new PerkSuperSpyCommand(this));
         getServer().getPluginManager().registerEvents(new PerkTPBowListener(), this);
         getServer().getPluginManager().registerEvents(new PerkPunchGunListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoin(), this);

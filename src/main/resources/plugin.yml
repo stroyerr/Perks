@@ -23,3 +23,7 @@ commands:
     description: Get your TP bow!
     usage: /<command>
     aliases: [teleportbow, tpgun, teleportgun, bow, tpb]
+  superspy:
+    description: Get your super spy glass!
+    usage: /<command>
+    aliases: [spy, supers, superspyglass, spyglass]

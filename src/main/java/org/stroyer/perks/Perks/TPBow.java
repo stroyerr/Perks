@@ -65,7 +65,7 @@ public class TPBow {
         return null;
     }
     public static void initialise(){
-        reloadTimer.runTaskTimer(Bukkit.getPluginManager().getPlugin("Perks"), 0L, 2L);
+        reloadTimer.runTaskTimer(Bukkit.getPluginManager().getPlugin("Perks"), 0L, 1L);
     }
 
     private void reload(){
@@ -88,6 +88,7 @@ public class TPBow {
 
     private static void reloadTimerEvent(){
         for(TPBow bow : allBows){
+            if(!bow.isReloading){return;}
             if(bow.isReloading){
                 if(bow.reloadTimeElapsed > 20){
                     bow.isReloading = false;
