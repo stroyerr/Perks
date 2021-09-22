@@ -26,7 +26,9 @@ package org.stroyer.perks.Perks;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.stroyer.perks.Util.Send;
 
@@ -52,12 +54,14 @@ public class SuperSpy {
     }
 
     public void enterZoom(){
-        if(this.player.getTargetBlock(1000) != null){
+        if(this.player.getTargetBlock(120) != null){
             this.beforeZoomLocation = this.player.getLocation();
             this.isInZoom = true;
-            this.newLocation = this.player.getTargetBlock(1000).getLocation();
+            this.newLocation = this.player.getTargetBlock(120).getLocation();
             playersInZoom.add(this);
-            this.player.teleport(this.player.getTargetBlock(1000).getLocation());
+            this.player.setGameMode(GameMode.SPECTATOR);
+            this.player.teleport(this.player.getTargetBlock(120).getLocation());
+            this.player.sendTitle(ChatColor.GREEN + "Now spying...", ChatColor.DARK_GREEN + "Crouch to exit", 20, 100, 20);
         }else{
             Send.player(this.player, ChatColor.RED + "No block in sight!");
         }
@@ -68,8 +72,13 @@ public class SuperSpy {
             Send.player(this.player, ChatColor.RED + "Right click to zoom, left click to exit.");
             return;
         }
+        this.player.setGameMode(GameMode.SURVIVAL);
         this.player.teleport(this.beforeZoomLocation);
+
         this.isInZoom = false;
+        this.player.teleport(this.beforeZoomLocation);
+        this.player.teleport(this.beforeZoomLocation);
+        this.player.teleport(new Location(this.beforeZoomLocation.getWorld(), this.beforeZoomLocation.getX(), this.beforeZoomLocation.getY(), this.beforeZoomLocation.getZ()));
     }
 
     public static SuperSpy getSuperSpy(Player player){
@@ -79,5 +88,13 @@ public class SuperSpy {
             }
         }
         return null;
+    }
+
+    public Boolean isInZoom(){
+        return this.isInZoom;
+    }
+
+    public Location getNewLocation() {
+        return this.newLocation;
     }
 }
