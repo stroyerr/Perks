@@ -91,6 +91,16 @@ public class GeneralCommand implements CommandExecutor {
                 Send.player(player, ChatColor.RED + "Could not find player " + args[1]);
                 return true;
             }
+            if(args[0].equalsIgnoreCase("get")){
+                for(Player p : Bukkit.getOnlinePlayers()){
+                    if(p.getName().equalsIgnoreCase(ChatColor.stripColor(args[1]))){
+                        Send.player(player, "Player " + ChatColor.YELLOW + args[1] + ChatColor.GREEN + " has " + ChatColor.YELLOW + PerksPlayer.getByPlayer(p).getTokens() + ChatColor.GREEN + " tokens.");
+                        return true;
+                    }
+                }
+                Send.player(player, ChatColor.DARK_RED + args[1] + ChatColor.RED + " is not online.");
+                return true;
+            }
         }
 
         if(args.length == 3){

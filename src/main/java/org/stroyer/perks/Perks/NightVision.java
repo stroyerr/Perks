@@ -1,4 +1,3 @@
-
 /*
  * Copyright © 2021 stroyerr
  *
@@ -22,12 +21,50 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package org.stroyer.perks.Listeners;
+package org.stroyer.perks.Perks;
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.entity.Player;
 
-public class PerkLaunchListener implements Listener {
-package org.stroyer.perks.Listeners;public class PerkLaunchListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public class NightVision {
+    protected final Player player;
+    private Boolean enabled;
+    private static List<NightVision> nightVisionObjects = new ArrayList<>();
+    public NightVision(Player player){
+        this.player = player;
+        this.enabled = false;
+        nightVisionObjects.add(this);
+    }
+
+    public Player getPlayer(){
+        return this.player;
+    }
+
+    public static NightVision getNightVision(Player player){
+        for(NightVision nv : nightVisionObjects){
+            if(nv.getPlayer().equals(player)){
+                return nv;
+            }
+        }
+        return null;
+    }
+
+    public Boolean isEnabled(){
+        return this.enabled;
+    }
+
+    public void toggleEnabled(){
+        
+    }
+
+    public static Boolean hasNightVisionObject(Player player){
+        for(NightVision nv : nightVisionObjects){
+            if(nv.getPlayer().equals(player)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
