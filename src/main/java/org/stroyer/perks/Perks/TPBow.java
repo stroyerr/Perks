@@ -28,8 +28,10 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.stroyer.perks.Util.PlaySound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,10 +64,13 @@ public class TPBow {
         }
         return null;
     }
+    public static void initialise(){
+        reloadTimer.runTaskTimer(Bukkit.getPluginManager().getPlugin("Perks"), 0L, 2L);
+    }
 
     private void reload(){
         if(!reloadTimerActive){
-            reloadTimer.runTaskTimer(Bukkit.getPluginManager().getPlugin("Perks"), 0L, 2L);
+
         }
         reloadingBows.add(this);
         this.isReloading = true;
@@ -77,10 +82,6 @@ public class TPBow {
         @Override
         public void run() {
             reloadTimerActive = true;
-            if(reloadingBows.size() == 0){
-                reloadTimerActive = false;
-                this.cancel();
-            }
             reloadTimerEvent();
         }
     };
@@ -88,17 +89,17 @@ public class TPBow {
     private static void reloadTimerEvent(){
         for(TPBow bow : allBows){
             if(bow.isReloading){
-                if(bow.reloadTimeElapsed == 20){
+                if(bow.reloadTimeElapsed > 20){
                     bow.isReloading = false;
                     bow.reloadTimeElapsed = 0;
                     reloadingBows.remove(bow);
-                    if(reloadingBows.size() == 0){
-                        reloadTimer.cancel();
-                    }
+                    bow.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "Reload complete"));
+                    PlaySound.player(bow.player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP);
+                    return;
                 }
-                bow.reloadTimeElapsed ++;
-                bow.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent( ChatColor.DARK_GREEN + StringUtils.repeat("▍", (bow.reloadTimeElapsed)) + ChatColor.RED + StringUtils.repeat("▍", (10-bow.reloadTimeElapsed))));
-            }
+                bow.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent( ChatColor.DARK_GREEN + StringUtils.repeat("▍", (bow.reloadTimeElapsed)) + ChatColor.RED + StringUtils.repeat("▍", (20-bow.reloadTimeElapsed))));
+                PlaySound.player(bow.player, Sound.BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF);
+                bow.reloadTimeElapsed ++;}
         }
     }
 

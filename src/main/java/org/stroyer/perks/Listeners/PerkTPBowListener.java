@@ -49,6 +49,9 @@ public class PerkTPBowListener implements Listener {
         if(!(PerksPlayer.getByPlayer(e.getPlayer()).hasPerk(Perk.TPBow))){
             return;
         }
+        if(e.getItem() == null){
+            return;
+        }
         if(!(e.getItem().equals(PerkTPBowCommand.tpBowItem))){
             return;
         }
@@ -64,7 +67,6 @@ public class PerkTPBowListener implements Listener {
         e.getPlayer().launchProjectile(Arrow.class, e.getPlayer().getLocation().getDirection());
         e.setCancelled(true);
         tpArrows.add(e.getPlayer());
-        TPBow.getTPBow(e.getPlayer()).attemptReload();
     }
     @EventHandler
     public static void arrowHit(ProjectileHitEvent e){
@@ -75,6 +77,7 @@ public class PerkTPBowListener implements Listener {
         if(tpArrows.contains(p)){
             p.teleport(e.getEntity().getLocation());
             PlaySound.player(p, Sound.ENTITY_ENDERMAN_TELEPORT);
+            TPBow.getTPBow(p).attemptReload();
             e.getEntity().remove();
             tpArrows.remove(p);
         }
