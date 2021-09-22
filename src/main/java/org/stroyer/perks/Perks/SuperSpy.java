@@ -72,13 +72,10 @@ public class SuperSpy {
             Send.player(this.player, ChatColor.RED + "Right click to zoom, left click to exit.");
             return;
         }
-        this.player.setGameMode(GameMode.SURVIVAL);
         this.player.teleport(this.beforeZoomLocation);
+        this.player.setGameMode(GameMode.SURVIVAL);
 
         this.isInZoom = false;
-        this.player.teleport(this.beforeZoomLocation);
-        this.player.teleport(this.beforeZoomLocation);
-        this.player.teleport(new Location(this.beforeZoomLocation.getWorld(), this.beforeZoomLocation.getX(), this.beforeZoomLocation.getY(), this.beforeZoomLocation.getZ()));
     }
 
     public static SuperSpy getSuperSpy(Player player){

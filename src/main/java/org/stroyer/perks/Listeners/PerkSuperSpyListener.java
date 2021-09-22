@@ -79,8 +79,9 @@ public class PerkSuperSpyListener implements Listener {
         if(SuperSpy.getSuperSpy(e.getPlayer()).isInZoom()){
             if(e.getTo().getY() < e.getFrom().getY()){
                 SuperSpy.getSuperSpy(e.getPlayer()).exitZoom();
+                return;
             }
-            e.getPlayer().teleport(new Location(e.getPlayer().getWorld(), SuperSpy.getSuperSpy(e.getPlayer()).getNewLocation().getX(), SuperSpy.getSuperSpy(e.getPlayer()).getNewLocation().getY(), SuperSpy.getSuperSpy(e.getPlayer()).getNewLocation().getZ()));
+            e.getPlayer().teleport(new Location(e.getPlayer().getWorld(), SuperSpy.getSuperSpy(e.getPlayer()).getNewLocation().getX(), SuperSpy.getSuperSpy(e.getPlayer()).getNewLocation().getY(), SuperSpy.getSuperSpy(e.getPlayer()).getNewLocation().getZ(), e.getTo().getYaw(), e.getTo().getPitch()));
         }
     }
 }
