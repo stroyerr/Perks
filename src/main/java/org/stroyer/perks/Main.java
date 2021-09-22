@@ -49,6 +49,7 @@ public final class Main extends JavaPlugin {
         getCommand("tpbow").setExecutor(new PerkTPBowCommand(this));
         getCommand("superspy").setExecutor(new PerkSuperSpyCommand(this));
         getCommand("nightvision").setExecutor(new PerkNightVisionCommand(this));
+        getServer().getPluginManager().registerEvents(new PerkFireProofListener(), this);
         getServer().getPluginManager().registerEvents(new PerkParachuteListener(), this);
         getServer().getPluginManager().registerEvents(new PerkSuperSpyListener(), this);
         getServer().getPluginManager().registerEvents(new PerkTPBowListener(), this);
