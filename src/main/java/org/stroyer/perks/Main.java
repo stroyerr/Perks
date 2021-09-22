@@ -27,6 +27,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.stroyer.perks.Commands.*;
 import org.stroyer.perks.Internal.PerkPlayerSerialization;
 import org.stroyer.perks.Listeners.*;
+<<<<<<< Updated upstream
+=======
+import org.stroyer.perks.Perks.Launch;
+import org.stroyer.perks.Perks.Parachute;
+>>>>>>> Stashed changes
 import org.stroyer.perks.Perks.PunchGun.PunchGun;
 import org.stroyer.perks.Perks.TPBow;
 
@@ -55,6 +60,11 @@ public final class Main extends JavaPlugin {
 
         PunchGun.initialise();
         TPBow.initialise();
+<<<<<<< Updated upstream
+=======
+        Parachute.intitialise();
+        Launch.initialise();
+>>>>>>> Stashed changes
 
 
     }
