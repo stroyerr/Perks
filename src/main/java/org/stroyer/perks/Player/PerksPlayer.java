@@ -26,6 +26,7 @@ package org.stroyer.perks.Player;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.stroyer.perks.Perks.Parachute;
 import org.stroyer.perks.Perks.Perk;
 import org.stroyer.perks.Tokens.Token;
 import org.stroyer.perks.Util.Send;
@@ -134,6 +135,9 @@ public class PerksPlayer implements Serializable {
 
     public void givePerk(Perk perk){
         this.perks.add(perk);
+        if (perk.getName().equals(Perk.Parachute.getName())) {
+        Parachute.addParachute(new Parachute(this.getPlayer()));
+        }
     }
 
     public void disable(){
