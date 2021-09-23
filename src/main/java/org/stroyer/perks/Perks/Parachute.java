@@ -32,6 +32,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.stroyer.perks.Player.PerksPlayer;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,17 +71,18 @@ public class Parachute {
 
     public static void intitialise(){
         parachuteChecker.runTaskTimer(Bukkit.getPluginManager().getPlugin("Perks"), 0L, 2L);
-        for(PerksPlayer p : PerksPlayer.perksPlayers){
-            if(p.hasPerk(Perk.Parachute)){
-                parachutes.add(new Parachute(p.getPlayer()));
-            }
-        }
+//        for(PerksPlayer p : PerksPlayer.perksPlayers){
+//            if(p.hasPerk(Perk.Parachute)){
+//                parachutes.add(new Parachute(p.getPlayer()));
+//            }
+//        }
     }
 
     private static BukkitRunnable parachuteChecker = new BukkitRunnable() {
         @Override
         public void run() {
             for(Parachute p : parachutes){
+                if(p.getPlayer() == null){return;}
                 if(p.getPlayer().isOnGround()){
                     continue;
                 }
@@ -92,7 +96,7 @@ public class Parachute {
                     }
                 }
 
-                if(shouldDeploy && p.getPlayer().getVelocity().getY() < 0){
+                if(shouldDeploy && p.getPlayer().getVelocity().getY() < -0.5){
                     p.getPlayer().getWorld().spawnParticle(Particle.CRIT_MAGIC,new Location(p.getPlayer().getWorld(), p.getPlayer().getLocation().getX(), p.getPlayer().getLocation().getY() - 0.3f, p.getPlayer().getLocation().getZ()), 5);
                     p.getPlayer().setVelocity(new Vector(p.getPlayer().getVelocity().getX(), -0.5, p.getPlayer().getVelocity().getZ()));
                 }

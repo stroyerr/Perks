@@ -46,6 +46,8 @@ public class MyPerks {
     public static List<PerkObject> perkObjects = new ArrayList<>();
 
     public static void open(Player player){
+        inv = Bukkit.createInventory(null, 54, "My Perks");
+        perkObjects = new ArrayList<>();
         PerksPlayer pp = PerksPlayer.getByPlayer(player);
         for(Perk perk : pp.getPerks()){
             perkObjects.add(new PerkObject(perk));

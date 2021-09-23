@@ -29,26 +29,50 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.stroyer.perks.Commands.PerkPunchCommand;
+import org.stroyer.perks.Perks.Parachute;
 import org.stroyer.perks.Perks.Perk;
 import org.stroyer.perks.Perks.PunchGun.PunchGun;
+import org.stroyer.perks.Perks.SuperSpy;
+import org.stroyer.perks.Perks.TPBow;
 import org.stroyer.perks.Player.PerksPlayer;
 import org.stroyer.perks.Util.Send;
 
 public class PlayerJoin implements Listener {
     @EventHandler
     public static void playerJoin(PlayerLoginEvent e){
+        final PerksPlayer[] pl = new PerksPlayer[1];
         BukkitRunnable br = new BukkitRunnable() {
             @Override
             public void run() {
+                PerksPlayer pp;
                 if(PerksPlayer.getByPlayer(e.getPlayer()) != null){
                     Send.console(e.getPlayer().getName() + " already has a Perk profile. No need to generate a new one.");
-                    return;
+                    pl[0] = PerksPlayer.getByPlayer(e.getPlayer());
+                    pp = pl[0];
                 }else{
                     PerksPlayer newPlayer = new PerksPlayer(e.getPlayer());
+                    pl[0] = newPlayer;
                     Send.console(e.getPlayer().getName() + " does not have a Perk profile. Generating one now...");
+                    return;
                 }
                 if(e.getPlayer().getInventory().contains(PerkPunchCommand.punchGunItem)){
                     PunchGun newGun = new PunchGun(e.getPlayer());
+                }
+                for(Perk p : pp.getPerks()){
+                    if(p.getName().equals(Perk.Parachute.getName())){
+                        Parachute par = new Parachute(pp.getPlayer());
+                        Parachute.addParachute(par);
+                    }
+                    if(p.getName().equals(Perk.PunchGun.getName())){
+                        PunchGun.removePunchGun(PunchGun.getPunchGun(pp.getPlayer()));
+                        PunchGun pg = new PunchGun(pp.getPlayer());
+                    }
+                    if(p.getName().equals(Perk.TPBow.getName())){
+                        TPBow tpb = new TPBow(pp.getPlayer());
+                    }
+                    if(p.getName().equals(Perk.SuperSpy.getName())){
+                        SuperSpy ss = new SuperSpy(pp.getPlayer());
+                    }
                 }
             }
         };

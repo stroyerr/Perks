@@ -30,10 +30,15 @@ import org.stroyer.perks.Listeners.*;
 import org.stroyer.perks.Perks.Parachute;
 import org.stroyer.perks.Perks.PunchGun.PunchGun;
 import org.stroyer.perks.Perks.TPBow;
+import org.stroyer.perks.Util.TabCompleter;
 
 import java.io.IOException;
 
 public final class Main extends JavaPlugin {
+
+    public static String[] mainCommands = new String[]{
+            "debug","get","givetoken", "help"
+    };
 
     @Override
     public void onEnable() {
@@ -45,6 +50,7 @@ public final class Main extends JavaPlugin {
 
         getCommand("punch").setExecutor(new PerkPunchCommand(this));
         getCommand("perks").setExecutor(new GeneralCommand(this));
+        getCommand("perk").setTabCompleter(new TabCompleter());
         getCommand("solo").setExecutor(new PerkSoloCommand(this));
         getCommand("tpbow").setExecutor(new PerkTPBowCommand(this));
         getCommand("superspy").setExecutor(new PerkSuperSpyCommand(this));

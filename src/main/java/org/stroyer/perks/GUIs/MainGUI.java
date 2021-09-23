@@ -41,12 +41,13 @@ public class MainGUI {
     public static Inventory inv = Bukkit.createInventory(null, 27, "Perks");
     public static ItemStack myPerks = NewItem.createGuiItem(Material.EMERALD_BLOCK, ChatColor.GREEN + "My Perks", ChatColor.DARK_GREEN + "View and manage your perks!");
     public static ItemStack allPerks = NewItem.createGuiItem(Material.GOLD_BLOCK, ChatColor.GOLD + "All perks", ChatColor.YELLOW + "View all perks");
-    public static ItemStack settings = NewItem.createGuiItem(Material.REDSTONE, ChatColor.GRAY + "Settings");
+    public static ItemStack settings = NewItem.createGuiItem(Material.DIAMOND_CHESTPLATE, ChatColor.AQUA  + "" + ChatColor.BOLD + "Style", ChatColor.DARK_AQUA + "Coming soon!");
     public static ItemStack playerDetails;
 
     public static void open(Player player){
 
-        playerDetails = NewItem.createGuiItem(Material.PLAYER_HEAD, ChatColor.WHITE + "" + ChatColor.BOLD + player.getName(), ChatColor.YELLOW + "" + ChatColor.LIGHT_PURPLE + PerksPlayer.getByPlayer(player).getTokens() + " " + Token.getSymbol());
+        inv = Bukkit.createInventory(null, 27, "Perks");
+        playerDetails = NewItem.createGuiItem(Material.PLAYER_HEAD, ChatColor.WHITE + "" + ChatColor.BOLD + player.getName(), ChatColor.YELLOW + "Your perks: " + ChatColor.GOLD + PerksPlayer.getByPlayer(player).getPerks().size() + "   " + ChatColor.WHITE + "&" +  "   "+ ChatColor.LIGHT_PURPLE + PerksPlayer.getByPlayer(player).getTokens() + " " + Token.getSymbol());
         SkullMeta headMeta = (SkullMeta) playerDetails.getItemMeta();
         headMeta.setOwner(player.getName());
         playerDetails.setItemMeta(headMeta);

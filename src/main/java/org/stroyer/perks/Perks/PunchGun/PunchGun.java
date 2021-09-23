@@ -33,7 +33,10 @@ import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.stroyer.perks.Commands.PerkPunchCommand;
+import org.stroyer.perks.Internal.Perks;
 import org.stroyer.perks.Main;
+import org.stroyer.perks.Perks.Perk;
+import org.stroyer.perks.Player.PerksPlayer;
 import org.stroyer.perks.Util.PlaySound;
 import org.stroyer.perks.Util.Send;
 
@@ -55,6 +58,10 @@ public class PunchGun {
         this.isReloading = false;
         this.reloadSecondsElapsed = 0;
         allGuns.add(this);
+    }
+
+    public static void removePunchGun(PunchGun punchGun) {
+        allGuns.remove(punchGun);
     }
 
     public Boolean canShoot(){
@@ -113,21 +120,22 @@ public class PunchGun {
 
     private static void ammoHudUpdate(){
         for(PunchGun gun : allGuns){
+            PerksPlayer pp = PerksPlayer.getByPlayer(gun.getPlayer());
             if(gun.player.getInventory().getItemInMainHand() == null){return;}
             if(gun.player.getInventory().getItemInMainHand().equals(PerkPunchCommand.punchGunItem)){
                 if(gun.rounds > 0){
                     if(gun.rounds == 3){
-                        gun.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.DARK_GREEN + "▍▍▍"));
+                        pp.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.DARK_GREEN + "▍▍▍"));
                     }
                     if(gun.rounds == 2){
-                        gun.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.DARK_GREEN + "▍▍" + ChatColor.RED + "▍"));
+                        pp.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.DARK_GREEN + "▍▍" + ChatColor.RED + "▍"));
                     }
                     if(gun.rounds == 1){
-                        gun.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.DARK_GREEN + "▍" + ChatColor.RED + "▍▍"));
+                        pp.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.DARK_GREEN + "▍" + ChatColor.RED + "▍▍"));
                     }
                 }else{
                     if(gun.isReloading){return;}
-                    gun.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED + "Left click to reload"));
+                    pp.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED + "Left click to reload"));
                 }
             }
         }
@@ -139,7 +147,7 @@ public class PunchGun {
             return;
         }
         if(this.rounds > 0){
-            Send.player(this.player, ChatColor.RED + "Your gun is already reloaded.");
+            Send.player(this.player, ChatColor.RED + "Your gun is not empty.");
             return;
         }
         this.reload();
@@ -168,16 +176,17 @@ public class PunchGun {
         List<PunchGun> gunsToRemove = new ArrayList<>();
 
         for(PunchGun gun : currentReloading){
+            PerksPlayer pp = PerksPlayer.getByPlayer(gun.getPlayer());
             if(gun.reloadSecondsElapsed != 5){
-                PlaySound.playerReload(gun.player);
+                PlaySound.playerReload(pp.getPlayer());
             }
-            gun.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent( ChatColor.GRAY + StringUtils.repeat("▍", (gun.reloadSecondsElapsed)) + ChatColor.WHITE + StringUtils.repeat("▍", (5-gun.reloadSecondsElapsed))));
+            pp.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent( ChatColor.GRAY + StringUtils.repeat("▍", (gun.reloadSecondsElapsed)) + ChatColor.WHITE + StringUtils.repeat("▍", (5-gun.reloadSecondsElapsed))));
             gun.reloadSecondsElapsed ++;
             if(gun.reloadSecondsElapsed > 5){
                 gun.isReloading = false;
                 gun.rounds = 3;
                 gun.reloadSecondsElapsed = 0;
-                PlaySound.player(gun.player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP);
+                PlaySound.player(pp.getPlayer(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP);
                 gunsToRemove.add(gun);
             }
         }

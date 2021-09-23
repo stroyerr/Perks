@@ -93,7 +93,7 @@ public class PerksPlayer implements Serializable {
 
     public Boolean hasPerk(Perk perk){
         for(Perk p : this.getPerks()){
-            if(p.equals(perk)){
+            if(p.getName().equals(perk.getName())){
                 return true;
             }
         }
@@ -131,10 +131,13 @@ public class PerksPlayer implements Serializable {
 
     public void giveToken(int amount){
         this.tokens += amount;
+        Send.broadcast(this.getPlayer().getName() + " has recieved " + amount + "" + Token.getSymbol() + " !");
     }
 
     public void givePerk(Perk perk){
+        if(this.hasPerk(perk)){Send.player(this.getPlayer(), ChatColor.RED + "You already have this perk!");}
         this.perks.add(perk);
+        Send.broadcast(this.getPlayer().getName() + " unlocked the " + perk.getName() + " perk for " + perk.getCost() + "" + Token.getSymbol());
         if (perk.getName().equals(Perk.Parachute.getName())) {
         Parachute.addParachute(new Parachute(this.getPlayer()));
         }

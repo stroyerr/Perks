@@ -23,28 +23,33 @@
 
 package org.stroyer.perks.Util;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.stroyer.perks.Main;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Send {
+public class TabCompleter implements org.bukkit.command.TabCompleter {
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
-    public static String prefix = ChatColor.DARK_GREEN + "Perks v" + Bukkit.getPluginManager().getPlugin("Perks").getDescription().getVersion() + ChatColor.GRAY + "// " + ChatColor.GREEN;
+        if (command.getName().equalsIgnoreCase("perks") || command.getName().equalsIgnoreCase("perk") || alias.equalsIgnoreCase("p")) { // checking if my command is the one i'm after
 
-    public static void player(Player p, String message){
-        p.sendMessage(prefix + message);
-    }
-    public static void console(String message) {Bukkit.getLogger().info("[Perks] " + message);}
-    public static void playerMultipleLines(Player p, String firstLine, List<String> messages){
-        player(p, firstLine);
-        for(String s : messages){
-            p.sendMessage(s);
+            List<String> autoCompletes = new ArrayList<>();
+
+            if (args.length == 1) {
+
+                for (int i = 0; i < Main.mainCommands.length; i++) {
+
+                    autoCompletes.add(Main.mainCommands[i]);
+
+                }
+
+                return autoCompletes;
+            }
         }
-    }
-    public static void broadcast(String message){
-        Bukkit.broadcastMessage(prefix + message);
+
+        return null;
     }
 }

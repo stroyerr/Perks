@@ -59,6 +59,11 @@ public class GeneralCommand implements CommandExecutor {
             return true;
         }
 
+        if(!player.hasPermission("perks.admin")){
+            Send.player(player, ChatColor.RED + "You do not have the " + ChatColor.DARK_RED + "perks.admin" + ChatColor.RED + " permission.");
+            return true;
+        }
+
         if(args.length == 1){
             if(args[0].equalsIgnoreCase("debug")){
                 if(player.hasPermission("perks.debug")){
@@ -74,6 +79,20 @@ public class GeneralCommand implements CommandExecutor {
                 }else{
                     Send.player(player, ChatColor.RED + "You do not have sufficient permissions to execute this command.");
                 }
+                return true;
+            }
+        }
+
+        if(args.length == 1){
+            if(args[0].equalsIgnoreCase("help")){
+                String[] helpMsgs = new String[]{
+                        ChatColor.GOLD + "/perks" + ChatColor.YELLOW + " Open Perks GUI",
+                        ChatColor.GOLD + "/perks debug" + ChatColor.YELLOW + " Get debug stats.",
+                        ChatColor.GOLD + "/perks givetoken <Player> [amount]" + ChatColor.YELLOW + " Gives the indicated player a token, or a certain amount of tokens if you specify.",
+                        ChatColor.GOLD + "/perks get <Player> " + ChatColor.YELLOW + "Returns the amount of tokens the player has.",
+                        ChatColor.GOLD + "/perks help" + ChatColor.YELLOW + " Returns this menu."
+                };
+                Send.playerMultipleLines(player, "Perks Command Help", Arrays.asList(helpMsgs));
                 return true;
             }
         }
@@ -97,18 +116,18 @@ public class GeneralCommand implements CommandExecutor {
             if(args[0].equalsIgnoreCase("givetoken")){
                 for(Player p : Bukkit.getOnlinePlayers()){
                     if(p.getUniqueId().equals(Bukkit.getPlayer(args[1]).getUniqueId())){
-                        PerksPlayer.getByPlayer(player).giveToken(Integer.parseInt(args[2]));
+                        PerksPlayer.getByPlayer(p).giveToken(Integer.parseInt(args[2]));
                         Send.player(player, "Gave " + args[1] + " " + args[2] + " tokens.");
                         Send.player(p, "You recieved " + args[2] + " tokens!");
                         return true;
                     }
                 }
-                Send.player(player, ChatColor.RED + "Could not find player " + args[1]);
+                Send.player(player, ChatColor.RED + "Could not find player " + ChatColor.DARK_RED + args[1]);
                 return true;
             }
         }
 
-        Send.player(player, ChatColor.RED + "Unkown command.");
+        Send.player(player, ChatColor.RED + "Unkown command. Use /perks help");
         return true;
     }
 }
