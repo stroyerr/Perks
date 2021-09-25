@@ -47,11 +47,42 @@ public class GeneralCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         if(!(sender instanceof Player)){
+            if(args.length == 2){
+                if(args[0].equalsIgnoreCase("givetoken")){
+                    for(Player p : Bukkit.getOnlinePlayers()){
+                        if(p.getUniqueId().equals(Bukkit.getPlayer(args[1]).getUniqueId())){
+                            PerksPlayer.getByPlayer(p).giveToken(1);
+                            Send.console("Gave " + args[1] + " a token.");
+                            Send.player(p, "You recieved a token!");
+                            return true;
+                        }
+                    }
+                    Send.console(ChatColor.RED + "Could not find player " + args[1]);
+                    return true;
+                }
+            }
+            if(args.length == 3){
+                if(args[0].equalsIgnoreCase("givetoken")){
+                    for(Player p : Bukkit.getOnlinePlayers()){
+                        if(p.getUniqueId().equals(Bukkit.getPlayer(args[1]).getUniqueId())){
+                            PerksPlayer.getByPlayer(p).giveToken(Integer.parseInt(args[2]));
+                            Send.console("Gave " + args[1] + " " + args[2] + " tokens.");
+                            Send.player(p, "You recieved " + args[2] + " tokens!");
+                            return true;
+                        }
+                    }
+                    Send.console(ChatColor.RED + "Could not find player " + ChatColor.DARK_RED + args[1]);
+                    return true;
+                }
+            }
             Send.console("Perks by Stroyer_");
             return true;
         }
 
+
         Player player = (Player) sender;
+
+
 
         if(args.length == 0){
             Send.player(player, "Perks by Stroyer_");
@@ -65,6 +96,18 @@ public class GeneralCommand implements CommandExecutor {
         }
 
         if(args.length == 1){
+
+            if(args[0].equalsIgnoreCase("get")){
+                for(Player p : Bukkit.getOnlinePlayers()){
+                    if(p.getName().equalsIgnoreCase(ChatColor.stripColor(args[1]))){
+                        Send.player(player, "Player " + ChatColor.YELLOW + args[1] + ChatColor.GREEN + " has " + ChatColor.YELLOW + PerksPlayer.getByPlayer(p).getTokens() + ChatColor.GREEN + " tokens.");
+                        return true;
+                    }
+                }
+                Send.player(player, ChatColor.DARK_RED + args[1] + ChatColor.RED + " is not online.");
+                return true;
+            }
+
             if(args[0].equalsIgnoreCase("debug")){
                 if(player.hasPermission("perks.debug")){
                     List<String> msg = Arrays.asList(
@@ -83,8 +126,8 @@ public class GeneralCommand implements CommandExecutor {
             }
         }
 
-        if(args.length == 1){
-            if(args[0].equalsIgnoreCase("help")){
+        if(args.length == 1) {
+            if (args[0].equalsIgnoreCase("help")) {
                 String[] helpMsgs = new String[]{
                         ChatColor.GOLD + "/perks" + ChatColor.YELLOW + " Open Perks GUI",
                         ChatColor.GOLD + "/perks debug" + ChatColor.YELLOW + " Get debug stats.",
@@ -96,12 +139,11 @@ public class GeneralCommand implements CommandExecutor {
                 return true;
             }
         }
-
         if(args.length == 2){
             if(args[0].equalsIgnoreCase("givetoken")){
                 for(Player p : Bukkit.getOnlinePlayers()){
                     if(p.getUniqueId().equals(Bukkit.getPlayer(args[1]).getUniqueId())){
-                        PerksPlayer.getByPlayer(player).giveToken(1);
+                        PerksPlayer.getByPlayer(p).giveToken(1);
                         Send.player(player, "Gave " + args[1] + " a token.");
                         Send.player(p, "You recieved a token!");
                         return true;

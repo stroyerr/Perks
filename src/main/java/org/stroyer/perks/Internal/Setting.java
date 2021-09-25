@@ -21,22 +21,35 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package org.stroyer.perks.Listeners;
+package org.stroyer.perks.Internal;
 
-import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.stroyer.perks.Internal.Settings;
 import org.stroyer.perks.Perks.Perk;
-import org.stroyer.perks.Player.PerksPlayer;
 
-public class PerkAllYouCanEatListener implements Listener {
-    public static void onHungerEvent(FoodLevelChangeEvent e){
-        if(!(e.getEntity() instanceof Player)){return;}
-        if(PerksPlayer.getByPlayer((Player) e.getEntity()) == null || Settings.getSettings((Player) e.getEntity()) == null){return;}
-        if(!Settings.getSettings((Player) e.getEntity()).isEnabled(Perk.AllYouCanEat)){return;}
-        if(PerksPlayer.getByPlayer((Player) e.getEntity()).hasPerk(Perk.AllYouCanEat)){
-            e.setCancelled(true);
-        }
+public class Setting {
+    private Perk perk;
+    private Boolean enabled;
+    public Setting(Perk perk, Boolean enabled){
+        this.perk = perk;
+        this.enabled = enabled;
+    }
+
+    public Boolean isEnabled(){
+        return this.enabled;
+    }
+
+    public Perk getPerk(){
+        return this.perk;
+    }
+
+    public void enabled(){
+        this.enabled = true;
+    }
+
+    public void disable(){
+        this.enabled = false;
+    }
+
+    public void toggle(){
+        this.enabled = !this.enabled;
     }
 }

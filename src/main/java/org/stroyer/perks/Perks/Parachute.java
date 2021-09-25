@@ -30,6 +30,7 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import org.stroyer.perks.Internal.Settings;
 import org.stroyer.perks.Player.PerksPlayer;
 
 import java.io.File;
@@ -83,7 +84,11 @@ public class Parachute {
         public void run() {
             for(Parachute p : parachutes){
                 if(p.getPlayer() == null){return;}
+                if(p.getPlayer().getName() == null){return;}
                 if(p.getPlayer().isOnGround()){
+                    continue;
+                }
+                if(!Settings.getSettings(p.getPlayer()).isEnabled(Perk.Parachute)){
                     continue;
                 }
                 Boolean shouldDeploy = false;

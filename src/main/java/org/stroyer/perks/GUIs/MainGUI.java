@@ -62,6 +62,7 @@ public class MainGUI {
 
     public static void inventoryEvent(InventoryClickEvent e){
         Player p = (Player) e.getWhoClicked();
+        if(e.getCurrentItem() == null){return;}
         if(e.getCurrentItem().equals(myPerks)){
             MyPerks.open(p);
         }

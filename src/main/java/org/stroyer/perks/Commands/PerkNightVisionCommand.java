@@ -21,22 +21,34 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package org.stroyer.perks.Listeners;
+package org.stroyer.perks.Commands;
 
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.stroyer.perks.Internal.Settings;
+import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.NotNull;
+import org.stroyer.perks.Main;
+import org.stroyer.perks.Perks.NightVision;
 import org.stroyer.perks.Perks.Perk;
 import org.stroyer.perks.Player.PerksPlayer;
+import org.stroyer.perks.Util.Send;
 
-public class PerkAllYouCanEatListener implements Listener {
-    public static void onHungerEvent(FoodLevelChangeEvent e){
-        if(!(e.getEntity() instanceof Player)){return;}
-        if(PerksPlayer.getByPlayer((Player) e.getEntity()) == null || Settings.getSettings((Player) e.getEntity()) == null){return;}
-        if(!Settings.getSettings((Player) e.getEntity()).isEnabled(Perk.AllYouCanEat)){return;}
-        if(PerksPlayer.getByPlayer((Player) e.getEntity()).hasPerk(Perk.AllYouCanEat)){
-            e.setCancelled(true);
-        }
+public class PerkNightVisionCommand implements CommandExecutor {
+    private final Main main;
+    public PerkNightVisionCommand(Main main){this.main = main;}
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if(!(sender instanceof Player)){Send.console("A player must execute this command.");}
+        Player p = (Player) sender;
+        if(!(PerksPlayer.getByPlayer(p).hasPerk(Perk.NightVision))){
+            Send.player(p, ChatColor.RED + "Unlock this perk in /perks"); return true;}
+
+        NightVision.getNightVision(p).toggleEnabled();
+
+            return true;
     }
 }

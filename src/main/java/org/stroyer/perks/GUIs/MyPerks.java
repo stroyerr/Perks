@@ -30,6 +30,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.stroyer.perks.Internal.Settings;
 import org.stroyer.perks.Perks.Perk;
 import org.stroyer.perks.Perks.PerkObject;
 import org.stroyer.perks.Player.PerksPlayer;
@@ -37,6 +39,7 @@ import org.stroyer.perks.Util.FillBlank;
 import org.stroyer.perks.Util.NewItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MyPerks {
@@ -57,6 +60,18 @@ public class MyPerks {
             inv.setItem(0, NewItem.createGuiItem(Material.BEDROCK, ChatColor.GRAY + "You don't have any perks!", "Buy some in the AllPerks tab!"));
         }else{
             for(PerkObject po : perkObjects){
+                ItemMeta im = po.getItemStack().getItemMeta();
+                String enabled = "";
+                if(Settings.getSettings(player).isEnabled(po.getPerk())){
+                    enabled = ChatColor.GREEN + "Enabled";
+                }else{
+                    enabled = ChatColor.RED + "Disabled";
+                }
+                List<String> lore = Arrays.asList(new String[]{
+                        enabled
+                });
+                im.setLore(lore);
+                po.getItemStack().setItemMeta(im);
                 inv.addItem(po.getItemStack());
             }
         }
@@ -72,6 +87,13 @@ public class MyPerks {
     public static void event(InventoryClickEvent e){
         if(e.getCurrentItem().equals(back)){
             MainGUI.open((Player) e.getWhoClicked());
+        }
+        for(PerkObject po : perkObjects){
+            if(e.getCurrentItem().equals(po.getItemStack())){
+                Settings.getSettings((Player) e.getWhoClicked()).toggle(po.getPerk());
+                open((Player) e.getWhoClicked());
+                return;
+            }
         }
     }
 

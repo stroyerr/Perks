@@ -21,22 +21,29 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package org.stroyer.perks.Listeners;
+package org.stroyer.perks.Style.GUIs;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.stroyer.perks.Internal.Settings;
-import org.stroyer.perks.Perks.Perk;
-import org.stroyer.perks.Player.PerksPlayer;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.stroyer.perks.Util.FillBlank;
+import org.stroyer.perks.Util.NewItem;
 
-public class PerkAllYouCanEatListener implements Listener {
-    public static void onHungerEvent(FoodLevelChangeEvent e){
-        if(!(e.getEntity() instanceof Player)){return;}
-        if(PerksPlayer.getByPlayer((Player) e.getEntity()) == null || Settings.getSettings((Player) e.getEntity()) == null){return;}
-        if(!Settings.getSettings((Player) e.getEntity()).isEnabled(Perk.AllYouCanEat)){return;}
-        if(PerksPlayer.getByPlayer((Player) e.getEntity()).hasPerk(Perk.AllYouCanEat)){
-            e.setCancelled(true);
-        }
+public class StylesGUI {
+    public static Inventory inv = Bukkit.createInventory(null, 45, "Styles");
+    public static final ItemStack halo = NewItem.createGuiItem(Material.LEATHER_HELMET, ChatColor.RED + "Halo");
+    public static final ItemStack trail = NewItem.createGuiItem(Material.BLAZE_POWDER, ChatColor.GOLD + "Trail");
+    public static final ItemStack back = NewItem.createGuiItem(Material.ARROW, ChatColor.WHITE + "Back");
+
+    public static void openMain(Player player){
+        inv = Bukkit.createInventory(null, 45, "Styles");
+        inv.setItem(35, back);
+        inv.setItem(22, halo);
+        inv.setItem(24, trail);
+        inv = FillBlank.updateInventory(inv);
+        player.openInventory(inv);
     }
 }

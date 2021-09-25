@@ -41,6 +41,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.stroyer.perks.Commands.PerkPunchCommand;
 import org.stroyer.perks.Perks.PunchGun.PunchGun;
+import org.stroyer.perks.Player.PerksPlayer;
 import org.stroyer.perks.Util.Send;
 
 public class PerkPunchGunListener implements Listener {
@@ -49,6 +50,7 @@ public class PerkPunchGunListener implements Listener {
         if(e.getItem() == null){
             return;
         }
+        if(PerksPlayer.getByPlayer(e.getPlayer()) == null){return;}
         if(e.getItem().equals(PerkPunchCommand.punchGunItem)){
             if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)){
                 if(PunchGun.hasPunchGun(e.getPlayer())){

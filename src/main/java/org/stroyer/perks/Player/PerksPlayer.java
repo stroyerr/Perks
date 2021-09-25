@@ -26,6 +26,7 @@ package org.stroyer.perks.Player;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.stroyer.perks.Perks.NightVision;
 import org.stroyer.perks.Perks.Parachute;
 import org.stroyer.perks.Perks.Perk;
 import org.stroyer.perks.Tokens.Token;
@@ -107,7 +108,9 @@ public class PerksPlayer implements Serializable {
     public static PerksPlayer getByPlayer(Player player){
         if(perksPlayers == null){perksPlayers = new ArrayList<>();}
         for(PerksPlayer pp : perksPlayers){
-            if(pp.getPlayer().equals(player)){
+            if(pp.getPlayer() == null){continue;}
+            if(pp.getPlayerUUID() == null){continue;}
+            if(pp.getPlayerUUID().equals(player.getUniqueId())){
                 return pp;
             }
         }
@@ -140,6 +143,9 @@ public class PerksPlayer implements Serializable {
         Send.broadcast(this.getPlayer().getName() + " unlocked the " + perk.getName() + " perk for " + perk.getCost() + "" + Token.getSymbol());
         if (perk.getName().equals(Perk.Parachute.getName())) {
         Parachute.addParachute(new Parachute(this.getPlayer()));
+        }
+        if(perk.getName().equals(Perk.NightVision)){
+            NightVision nv = new NightVision(this.getPlayer());
         }
     }
 

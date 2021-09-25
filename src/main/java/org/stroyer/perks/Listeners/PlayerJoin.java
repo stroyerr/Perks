@@ -29,11 +29,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.stroyer.perks.Commands.PerkPunchCommand;
-import org.stroyer.perks.Perks.Parachute;
-import org.stroyer.perks.Perks.Perk;
+import org.stroyer.perks.Internal.Settings;
+import org.stroyer.perks.Perks.*;
 import org.stroyer.perks.Perks.PunchGun.PunchGun;
-import org.stroyer.perks.Perks.SuperSpy;
-import org.stroyer.perks.Perks.TPBow;
 import org.stroyer.perks.Player.PerksPlayer;
 import org.stroyer.perks.Util.Send;
 
@@ -45,6 +43,21 @@ public class PlayerJoin implements Listener {
             @Override
             public void run() {
                 PerksPlayer pp;
+                boolean has = false;
+                for(PerksPlayer p : PerksPlayer.perksPlayers){
+                    if(p.getPlayer() == null){continue;}
+                    if(p.getPlayer().getUniqueId().equals(e.getPlayer().getUniqueId())){
+                        has = true;
+                        break;
+                    }else{
+                        has = false;
+                    }
+                }
+                if(has = false){
+                    PerksPlayer newPP = new PerksPlayer(e.getPlayer());
+                }else{
+
+                }
                 if(PerksPlayer.getByPlayer(e.getPlayer()) != null){
                     Send.console(e.getPlayer().getName() + " already has a Perk profile. No need to generate a new one.");
                     pl[0] = PerksPlayer.getByPlayer(e.getPlayer());
@@ -53,7 +66,15 @@ public class PlayerJoin implements Listener {
                     PerksPlayer newPlayer = new PerksPlayer(e.getPlayer());
                     pl[0] = newPlayer;
                     Send.console(e.getPlayer().getName() + " does not have a Perk profile. Generating one now...");
-                    return;
+                    pp = pl[0];
+                }
+                if(pp.getPlayer() == null){return;}
+                if(pp.getPlayer().getName() == null){return;}
+                if(Settings.hasSettingsProfile(e.getPlayer())){
+                    Send.console("Player already has a settings profile.");
+                }else{
+                    Send.console("Generating player settings profile.");
+                    Settings settings = new Settings(PerksPlayer.getByPlayer(e.getPlayer()));
                 }
                 if(e.getPlayer().getInventory().contains(PerkPunchCommand.punchGunItem)){
                     PunchGun newGun = new PunchGun(e.getPlayer());
@@ -72,6 +93,9 @@ public class PlayerJoin implements Listener {
                     }
                     if(p.getName().equals(Perk.SuperSpy.getName())){
                         SuperSpy ss = new SuperSpy(pp.getPlayer());
+                    }
+                    if(p.getName().equals(Perk.NightVision.getName())){
+                        NightVision nv = new NightVision(pp.getPlayer());
                     }
                 }
             }
