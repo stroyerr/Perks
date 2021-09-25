@@ -164,4 +164,8 @@ public class PerksPlayer implements Serializable {
     public UUID getPlayerUUID() {
         return this.playerUUID;
     }
+
+    public void takeTokens(int i) {
+        this.tokens -= i;
+    }
 }

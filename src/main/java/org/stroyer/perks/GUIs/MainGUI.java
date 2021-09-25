@@ -32,6 +32,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.stroyer.perks.GUIs.guiobjects.TradeInModifierObject;
 import org.stroyer.perks.Player.PerksPlayer;
 import org.stroyer.perks.Tokens.Token;
 import org.stroyer.perks.Util.FillBlank;
@@ -42,6 +43,7 @@ public class MainGUI {
     public static ItemStack myPerks = NewItem.createGuiItem(Material.EMERALD_BLOCK, ChatColor.GREEN + "My Perks", ChatColor.DARK_GREEN + "View and manage your perks!");
     public static ItemStack allPerks = NewItem.createGuiItem(Material.GOLD_BLOCK, ChatColor.GOLD + "All perks", ChatColor.YELLOW + "View all perks");
     public static ItemStack settings = NewItem.createGuiItem(Material.DIAMOND_CHESTPLATE, ChatColor.AQUA  + "" + ChatColor.BOLD + "Style", ChatColor.DARK_AQUA + "Coming soon!");
+    public static ItemStack tradeIn = NewItem.createGuiItem(Material.GOLD_INGOT, ChatColor.GOLD + "Trade in your " + ChatColor.GOLD + Token.getSymbol());
     public static ItemStack playerDetails;
 
     public static void open(Player player){
@@ -52,9 +54,10 @@ public class MainGUI {
         headMeta.setOwner(player.getName());
         playerDetails.setItemMeta(headMeta);
 
-        inv.setItem(11, allPerks);
-        inv.setItem(13, myPerks);
-        inv.setItem(15, settings);
+        inv.setItem(10, allPerks);
+        inv.setItem(12, myPerks);
+        inv.setItem(14, tradeIn);
+        inv.setItem(16, settings);
         inv.setItem(26, playerDetails);
         inv = FillBlank.updateInventory(inv);
         player.openInventory(inv);
@@ -68,6 +71,9 @@ public class MainGUI {
         }
         if(e.getCurrentItem().equals(allPerks)){
             AllPerks.open(p);
+        }
+        if(e.getCurrentItem().equals(tradeIn)){
+            TradeInGUI.open(p);
         }
     }
 }

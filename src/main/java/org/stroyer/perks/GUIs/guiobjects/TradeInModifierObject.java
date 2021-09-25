@@ -21,36 +21,22 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package org.stroyer.perks.Listeners;
+package org.stroyer.perks.GUIs.guiobjects;
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.stroyer.perks.GUIs.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.stroyer.perks.Util.NewItem;
 
-public class InventoryClick implements Listener {
-
-    @EventHandler
-    public static void onClick(InventoryClickEvent e){
-        if(e.getInventory().equals(MainGUI.inv)){
-            e.setCancelled(true);
-            MainGUI.inventoryEvent(e);
-        }
-        if(e.getInventory().equals(MyPerks.inv)){
-            e.setCancelled(true);
-            MyPerks.event(e);
-        }
-        if(e.getInventory().equals(AllPerks.inv)){
-            e.setCancelled(true);
-            AllPerks.event(e);
-        }
-        if(e.getInventory().equals(PerkPage.inv)){
-            e.setCancelled(true);
-            PerkPage.event(e);
-        }
-        if(e.getInventory().equals(TradeInGUI.mainInv)){
-            e.setCancelled(true);
-            TradeInGUI.event(e);
+public class TradeInModifierObject {
+    public ItemStack itemStack;
+    public int modifier;
+    public TradeInModifierObject(int modifier){
+        this.modifier = modifier;
+        if(modifier > 0){
+            this.itemStack = NewItem.createGuiItem(Material.LIME_STAINED_GLASS_PANE, ChatColor.GREEN + "+" + modifier);
+        }else{
+            this.itemStack = NewItem.createGuiItem(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "" + modifier);
         }
     }
 }
