@@ -68,7 +68,7 @@ public class PerkSoloCommand implements CommandExecutor {
             }
         }
         if(!found){
-            Send.player(p, ChatColor.RED + "Unlock this in /perk");
+            Send.player(p, ChatColor.RED + "Unlock this in /perks");
             return true;
         }
 
